@@ -12,23 +12,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Scenario extends AbstractEntity {
+public class Communication extends AbstractEntity {
 
     @Column
-    private String scenarioName;
+    private String aiConv;
 
     @Column
-    private String scenarioDescription;
+    private String contexte;
 
-    @Column
-    private String aiQuestion;
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "scenario")
-    private ScenarioScene scenarioScene;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private ScenarioType scenarioType;
+    private CommunicationType communicationType;
 
     @Column
     private boolean isPassed;
@@ -36,8 +31,8 @@ public class Scenario extends AbstractEntity {
     @Column
     private String userResponse;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "scenario")
-    private ScenarioCorrection scenarioCorrection;
+    @Column
+    private String correction;
 
     @ManyToOne
     @JoinColumn(name = "id_lecon")
