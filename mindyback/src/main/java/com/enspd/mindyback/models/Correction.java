@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class ScenarioCorrection extends AbstractEntity {
+public class Correction extends AbstractEntity {
     @Column
     private String analysis;
 
@@ -21,6 +21,7 @@ public class ScenarioCorrection extends AbstractEntity {
     private String response;
 
     @OneToOne
-    @JoinColumn(name = "id_scenario", nullable = false)
-    private Scenario scenario;
+    @JoinColumn(name = "id_game", nullable = false)
+    private Game game;
+
 }

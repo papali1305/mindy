@@ -1,10 +1,15 @@
 package com.enspd.mindyback.services.impl;
 
+import com.enspd.mindyback.models.Lecon;
 import com.enspd.mindyback.models.Scenario;
 import com.enspd.mindyback.repository.ScenarioRepository;
+import com.enspd.mindyback.services.IaService;
 import com.enspd.mindyback.services.ScenarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ScenarioServiceImpl implements ScenarioService {
@@ -12,9 +17,21 @@ public class ScenarioServiceImpl implements ScenarioService {
     @Autowired
     private ScenarioRepository scenarioRepository;
 
+    @Autowired
+    private IaService iaService;
+
     @Override
-    public Scenario createScenario(Scenario scenario) {
-        return scenarioRepository.save(scenario);
+    public List<Scenario> createScenarios(Lecon lecon) {
+        List<Scenario> scenarios = iaService.createScenarios(lecon);
+        List<Scenario> scenariosToSend = new ArrayList<>();
+
+        scenarios.forEach(scenario -> {
+            scenario.setPassed(false);
+            scenario.setLecon(lecon);
+            scenariosToSend.add(scenarioRepository.save(scenario));
+
+        });
+        return scenariosToSend;
     }
 
     @Override

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.apache.catalina.LifecycleState;
 
 import java.util.List;
 
@@ -27,10 +26,8 @@ public class Lecon extends AbstractEntity{
     private String objSpec;
 
     @OneToMany(mappedBy = "lecon", cascade = CascadeType.ALL)
-    private List<Scenario> scenarios;
+    private List<Game> games;
 
-    @OneToMany(mappedBy = "lecon", cascade = CascadeType.ALL)
-    private List<Communication> communication;
 
     @OneToMany(mappedBy = "lecon", cascade = CascadeType.ALL)
     private List<Evaluation> evaluation;

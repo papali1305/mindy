@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Communication extends AbstractEntity {
+public class Communication extends Game {
 
     @Column
     private String aiConv;
@@ -25,16 +25,4 @@ public class Communication extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private CommunicationType communicationType;
 
-    @Column
-    private boolean isPassed;
-
-    @Column
-    private String userResponse;
-
-    @Column
-    private String correction;
-
-    @ManyToOne
-    @JoinColumn(name = "id_lecon")
-    private Lecon lecon;
 }
