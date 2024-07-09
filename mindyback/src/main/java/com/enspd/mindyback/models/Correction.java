@@ -1,5 +1,6 @@
 package com.enspd.mindyback.models;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,18 +13,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Scenario extends Game {
-
+public class Correction extends AbstractEntity {
+    @Column
+    private String analysis;
 
     @Column
-    private String aiQuestion;
+    private String response;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "scenario")
-    private ScenarioScene scenarioScene;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    private ScenarioType scenarioType;
-
+    @OneToOne
+    @JoinColumn(name = "id_game", nullable = false)
+    private Game game;
 
 }

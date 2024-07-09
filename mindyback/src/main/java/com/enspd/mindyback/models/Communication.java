@@ -12,18 +12,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Scenario extends Game {
-
+public class Communication extends Game {
 
     @Column
-    private String aiQuestion;
+    private String aiConv;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "scenario")
-    private ScenarioScene scenarioScene;
+    @Column
+    private String contexte;
+
 
     @Column
     @Enumerated(EnumType.STRING)
-    private ScenarioType scenarioType;
-
+    private CommunicationType communicationType;
 
 }

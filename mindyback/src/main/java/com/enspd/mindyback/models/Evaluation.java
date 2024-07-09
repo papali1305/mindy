@@ -1,6 +1,5 @@
 package com.enspd.mindyback.models;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,14 +12,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class ScenarioCorrection extends AbstractEntity {
-    @Column
-    private String analysis;
+public class Evaluation extends AbstractEntity{
 
     @Column
-    private String response;
+    private int evaluationNumber;
 
-    @OneToOne
-    @JoinColumn(name = "id_scenario", nullable = false)
-    private Scenario scenario;
+    @Column
+    private String commentaire;
+
+    @Column
+    private int progres;
+
+    @ManyToOne
+    @JoinColumn(name = "id_lecon")
+    private Lecon lecon;
 }

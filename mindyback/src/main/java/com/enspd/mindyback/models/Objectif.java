@@ -6,24 +6,28 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Scenario extends Game {
-
-
-    @Column
-    private String aiQuestion;
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "scenario")
-    private ScenarioScene scenarioScene;
+public class Objectif extends AbstractEntity{
 
     @Column
-    @Enumerated(EnumType.STRING)
-    private ScenarioType scenarioType;
+    private String nom;
+
+    @Column
+    private String description;
+
+    @Column
+    private int priority;
+
+    @ManyToOne
+    @JoinColumn(name = "id_competence")
+    private Competence competence;
 
 
 }

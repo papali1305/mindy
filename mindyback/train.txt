@@ -1,0 +1,43 @@
+[
+    {
+        "input_text": "Description: A serene landscape with mountains in the background and a river flowing through the valley",
+        "output_text": "A tranquil scene showing mountains, a river, and lush greenery."
+    },
+    {
+        "input_text": "Description: A futuristic cityscape with towering skyscrapers and flying cars",
+        "output_text": "A bustling futuristic city with tall buildings and advanced technology."
+    },
+    {
+        "input_text": "Description: A close-up of a vibrant red rose with dew drops on its petals",
+        "output_text": "A detailed close-up of a red rose with visible dew drops."
+    },
+    {
+        "input_text": "Description: An astronaut floating in space with the Earth in the background",
+        "output_text": "An astronaut in a spacesuit floating in the vastness of space with Earth visible behind."
+    },
+    {
+        "input_text": "Description: A medieval castle on a hilltop surrounded by a dense forest",
+        "output_text": "A grand medieval castle situated on a hilltop, encircled by a lush forest."
+    },
+    {
+        "input_text": "Description: A bustling market street in an ancient Middle Eastern city",
+        "output_text": "A lively market street filled with vendors and shoppers in a historic Middle Eastern city."
+    },
+    {
+        "input_text": "Description: A majestic eagle soaring over a mountain range",
+        "output_text": "A powerful eagle flying high above a rugged mountain range."
+    },
+    {
+        "input_text": "Description: A cozy cottage in the woods during autumn with leaves falling",
+        "output_text": "A charming cottage nestled in the forest, surrounded by colorful autumn leaves."
+    },
+    {
+        "input_text": "Description: A fantasy dragon breathing fire in a mystical land",
+        "output_text": "A mythical dragon emitting flames in a magical, otherworldly landscape."
+    },
+    {
+        "input_text": "Description: A group of children playing with a puppy in a park on a sunny day",
+        "output_text": "Happy children enjoying time with a playful puppy in a sunlit park."
+    }
+]
+
