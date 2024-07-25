@@ -1,9 +1,8 @@
 package com.enspd.mindyback.services;
 
-import com.enspd.mindyback.models.Communication;
-import com.enspd.mindyback.models.Lecon;
-import com.enspd.mindyback.models.Scenario;
-import com.enspd.mindyback.models.ScenarioScene;
+import com.enspd.mindyback.dto.ChapterDto;
+import com.enspd.mindyback.dto.CompetenceDto;
+import com.enspd.mindyback.models.*;
 
 import java.util.List;
 
@@ -14,4 +13,10 @@ public interface IaService {
      List<Scenario> createScenarios(Lecon lecon);
 
      List<Communication> createCommunication(Lecon lecon);
+
+    List<Lecon> createLecons(Chapter chapter);
+
+    Correction corrigeGame(Integer gameId, String userResponse);
+
+    List<Chapter> createChapters(CompetenceDto competenceDto);
 }

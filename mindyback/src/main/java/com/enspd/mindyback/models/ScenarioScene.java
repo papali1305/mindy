@@ -1,5 +1,6 @@
 package com.enspd.mindyback.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,10 +18,11 @@ public class ScenarioScene extends AbstractEntity {
     @Column
     private String prompt;
 
-    @Column
+    @Column()
     private String pathToScene;
 
     @OneToOne
-    @JoinColumn(name = "id_scenario", nullable = false)
+    @JoinColumn(name = "scenarioId", nullable = false)
+    @JsonBackReference
     private Scenario scenario;
 }

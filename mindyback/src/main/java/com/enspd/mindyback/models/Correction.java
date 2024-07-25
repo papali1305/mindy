@@ -17,11 +17,14 @@ public class Correction extends AbstractEntity {
     @Column
     private String analysis;
 
-    @Column
+    @Column(columnDefinition = "TEXT", length = 2000)
     private String response;
 
+    @Column
+    private boolean isCorrect;
+
     @OneToOne
-    @JoinColumn(name = "id_game", nullable = false)
+    @JoinColumn(name = "gameId", nullable = false)
     private Game game;
 
 }

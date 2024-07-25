@@ -1,5 +1,6 @@
 package com.enspd.mindyback.models;
 
+import com.enspd.mindyback.models.type.CompetenceType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,19 +17,32 @@ import java.util.List;
 @EqualsAndHashCode
 public class Competence extends AbstractEntity {
 
-    @Column
-    private String nom;
+
+
+    public Competence(CompetenceType competenceType) {
+        this.name = competenceType.getName();
+        this.description = competenceType.getDescription();
+        this.competenceType = competenceType;
+    }
 
     @Column
+    private String name;
+
+    @Column(columnDefinition = "TEXT", length = 2000)
     private String description;
 
     @Column
     private CompetenceType competenceType;
 
-    @OneToMany(mappedBy = "competence", cascade = CascadeType.ALL)
-    private List<Objectif> objectifs;
+    @Column
+    private float score = 0;
 
-    @OneToOne(mappedBy = "competence", cascade = CascadeType.ALL)
-    private Chapter chapter;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+
+
+    @OneToMany(mappedBy = "competence", cascade = CascadeType.ALL)
+    private List<Chapter> chapters;
 
 }

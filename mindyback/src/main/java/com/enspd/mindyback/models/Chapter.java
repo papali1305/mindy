@@ -17,19 +17,25 @@ import java.util.List;
 public class Chapter extends AbstractEntity{
 
     @Column
-    private String nom;
+    private String name;
 
-    @Column
+    @Column(columnDefinition = "TEXT", length = 2000)
     private String description;
 
-    @Column
-    private String objSpec;
+    @Column(columnDefinition = "TEXT", length = 2000)
+    private String objectives;
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
     private List<Lecon> lecons;
 
-    @OneToOne
-    @JoinColumn(name = "id_competence", nullable = false)
+    @Column
+    private boolean isCurrent = false;
+
+    @Column
+    private boolean isCompleted = false;
+
+    @ManyToOne
+    @JoinColumn(name = "competenceId")
     private Competence competence;
 
 }
