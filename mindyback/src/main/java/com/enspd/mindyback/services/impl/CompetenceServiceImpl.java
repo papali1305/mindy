@@ -2,6 +2,7 @@ package com.enspd.mindyback.services.impl;
 
 import com.enspd.mindyback.dto.ChapterDto;
 import com.enspd.mindyback.dto.CompetenceDto;
+import com.enspd.mindyback.dto.UserDto;
 import com.enspd.mindyback.exception.EntityNotFoundException;
 import com.enspd.mindyback.exception.ErrorCodes;
 import com.enspd.mindyback.models.Chapter;
@@ -11,6 +12,7 @@ import com.enspd.mindyback.repository.CompetenceRepository;
 import com.enspd.mindyback.services.ChapterService;
 import com.enspd.mindyback.services.CompetenceService;
 import com.enspd.mindyback.services.IaService;
+import com.enspd.mindyback.services.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,13 +34,16 @@ public class CompetenceServiceImpl implements CompetenceService {
     @Autowired
     private IaService iaService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     @Transactional
-    public CompetenceDto createCompetence(CompetenceDto competenceDto) {
-        List<Chapter> chapters = iaService.createChapters(competenceDto);
-    List<ChapterDto> chaptersDto = new ArrayList<>();
+    public CompetenceDto createCompetence(CompetenceDto competenceDto ) {
+        UserDto userDto = competenceDto.user();
+        List<Chapter> chapters = iaService.createChapters(competenceDto, userDto);
+        List<ChapterDto> chaptersDto = new ArrayList<>();
         Competence competenceSaved = competenceRepository.save(CompetenceDto.toEntity(competenceDto));
-        System.out.println(competenceSaved);
         for (Chapter chapter : chapters) {
             chapter.setCompetence(competenceSaved);
             chaptersDto.add(ChapterDto.fromEntity(chapter));

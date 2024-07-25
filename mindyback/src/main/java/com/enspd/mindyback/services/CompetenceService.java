@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CompetenceService {
 
-    CompetenceDto createCompetence(CompetenceDto competenceDto);
+    CompetenceDto createCompetence(CompetenceDto competenceDto );
 
     CompetenceDto updateCompetence(CompetenceDto competenceDto);
 

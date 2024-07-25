@@ -15,12 +15,13 @@ public enum ErrorCodes {
 
   CHAPTER_CANNOT_BE_VALID(3002),
   CHAPTER_CANNOT_BE_SET_CURRENT(3003),
+  CHAPTER_NOT_COMPLETE(3004),
 
 
   LECON_NOT_FOUND(4000),
   LECONS_NOT_FOUND(4001),
   LECON_NOT_VALID(4002),
-
+  LECONS_CREATION_ERROR(4003),
 
   BAD_CREDENTIALS(12003),
 
@@ -30,8 +31,7 @@ public enum ErrorCodes {
   // Liste des exception techniaues
 
   IMAGE_SAVE_ERROR(14000),
-  UNKNOWN_CONTEXT(14001)
-  ;
+  UNKNOWN_CONTEXT(14001);
 
   private int code;
 

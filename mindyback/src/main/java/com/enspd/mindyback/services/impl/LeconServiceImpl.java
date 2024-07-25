@@ -1,8 +1,11 @@
 package com.enspd.mindyback.services.impl;
 
 import com.enspd.mindyback.dto.ChapterDto;
+import com.enspd.mindyback.dto.LeconDto;
+import com.enspd.mindyback.dto.UserDto;
 import com.enspd.mindyback.exception.EntityNotFoundException;
 import com.enspd.mindyback.exception.ErrorCodes;
+import com.enspd.mindyback.exception.InvalidOperationException;
 import com.enspd.mindyback.models.Chapter;
 import com.enspd.mindyback.models.Lecon;
 import com.enspd.mindyback.repository.ChapterRepository;
@@ -10,6 +13,7 @@ import com.enspd.mindyback.repository.LeconRepository;
 import com.enspd.mindyback.services.ChapterService;
 import com.enspd.mindyback.services.IaService;
 import com.enspd.mindyback.services.LeconService;
+import com.enspd.mindyback.services.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,21 +34,31 @@ public class LeconServiceImpl implements LeconService {
 
     @Autowired
     private IaService iaService;
-    
+    @Autowired
+    private UserService userService;
+
     @Override
     @Transactional
 
-    public List<Lecon> createLecons(Integer chapterId) {
+    public List<LeconDto> createLecons(Integer chapterId, String jwt) {
         ChapterDto chapterDto = chapterService.findChapterById(chapterId);
-        List<Lecon> lecons = iaService.createLecons(ChapterDto.toEntity(chapterDto));
-        List<Lecon> leconsToSend = new ArrayList<>();
-        lecons.forEach((lecon) -> {
-            lecon.setChapter(ChapterDto.toEntity(chapterDto));
-            leconRepository.save(lecon);
-            leconsToSend.add(lecon);
-        }) ;
-        System.out.println("envois de la liste de lecons :" +leconsToSend);
-        return  leconsToSend;
+        UserDto userDto = userService.findUserByJwt(jwt);
+        if (chapterDto.isCurrent() || chapterDto.isCompleted()) {
+            try {
+                List<Lecon> lecons = iaService.createLecons(ChapterDto.toEntity(chapterDto), userDto);
+
+                lecons.forEach((lecon) -> {
+                    lecon.setChapter(ChapterDto.toEntity(chapterDto));
+                });
+                return leconRepository.saveAll(lecons).stream().map(LeconDto::fromEntity).toList();
+
+            } catch (EntityNotFoundException e) {
+                throw new InvalidOperationException("Erreur lors de la création des lecons", ErrorCodes.LECONS_CREATION_ERROR);
+            }
+
+        } else {
+            throw new InvalidOperationException("Les chapitres precedents n ont pas encore ete complete", ErrorCodes.CHAPTER_NOT_COMPLETE);
+        }
     }
 
     @Override
@@ -56,20 +70,20 @@ public class LeconServiceImpl implements LeconService {
     @Override
     @Transactional
 
-    public Lecon updateLecon(Lecon lecon) {
-        Lecon lecon1 = findLecon(lecon.getId());
-        BeanUtils.copyProperties(lecon, lecon1, "id" );
-        return leconRepository.save(lecon1);
+    public LeconDto updateLecon(LeconDto lecon) {
+        LeconDto lecon1 = findLecon(lecon.id());
+        BeanUtils.copyProperties(lecon, lecon1, "id");
+        return LeconDto.fromEntity(leconRepository.save(LeconDto.toEntity(lecon1)));
     }
 
 
     @Override
-    public Lecon findLecon(Integer leconId) {
-        return  leconRepository.findById(leconId).orElseThrow(()-> new EntityNotFoundException("lecon non trouve avec l'id " +leconId, ErrorCodes.LECON_NOT_FOUND));
+    public LeconDto findLecon(Integer leconId) {
+        return LeconDto.fromEntity(leconRepository.findById(leconId).orElseThrow(() -> new EntityNotFoundException("lecon non trouve avec l'id " + leconId, ErrorCodes.LECON_NOT_FOUND)));
     }
 
     @Override
-    public List<Lecon> findLeconsByChapter(Integer chapterId) {
-        return  leconRepository.findByChapterId(chapterId).orElseThrow(() -> new EntityNotFoundException("aucune lecon  trouve pour le chapitre avec l'id " +chapterId , ErrorCodes.LECONS_NOT_FOUND));
+    public List<LeconDto> findLeconsByChapter(Integer chapterId) {
+        return leconRepository.findByChapterId(chapterId).orElseThrow(() -> new EntityNotFoundException("aucune lecon  trouve pour le chapitre avec l'id " + chapterId, ErrorCodes.LECONS_NOT_FOUND)).stream().map(LeconDto::fromEntity).toList();
     }
 }

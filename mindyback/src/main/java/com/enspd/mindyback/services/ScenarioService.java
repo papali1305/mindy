@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ScenarioService {
 
-    List<Scenario> createScenarios(Lecon lecon);
+    List<Scenario> createScenarios(Lecon lecon, String jwt);
 
     Scenario findScenario(Integer idScenario);
 

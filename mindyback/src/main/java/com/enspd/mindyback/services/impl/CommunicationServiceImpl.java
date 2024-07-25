@@ -1,11 +1,13 @@
 package com.enspd.mindyback.services.impl;
 
+import com.enspd.mindyback.dto.UserDto;
 import com.enspd.mindyback.models.Communication;
 import com.enspd.mindyback.models.Lecon;
 import com.enspd.mindyback.models.Scenario;
 import com.enspd.mindyback.repository.CommunicationRepository;
 import com.enspd.mindyback.services.CommunicationService;
 import com.enspd.mindyback.services.IaService;
+import com.enspd.mindyback.services.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,16 @@ public class CommunicationServiceImpl implements CommunicationService {
     @Autowired
     private CommunicationRepository communicationRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     @Transactional
 
-    public List<Communication> createCommunications(Lecon lecon) {
-        List<Communication> communications = iaService.createCommunication(lecon);
+    public List<Communication> createCommunications(Lecon lecon , String jwt) {
+        UserDto userDto = userService.findUserByJwt(jwt);
+
+        List<Communication> communications = iaService.createCommunication(lecon , userDto);
         List<Communication> communicationsToSend = new ArrayList<>();
         communications.forEach(communication -> {
             communication.setPassed(false);

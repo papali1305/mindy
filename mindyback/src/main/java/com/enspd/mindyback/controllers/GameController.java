@@ -1,6 +1,7 @@
 package com.enspd.mindyback.controllers;
 
 import com.enspd.mindyback.controllers.api.GameApi;
+import com.enspd.mindyback.dto.LeconDto;
 import com.enspd.mindyback.models.Communication;
 import com.enspd.mindyback.models.Lecon;
 import com.enspd.mindyback.models.Scenario;
@@ -29,8 +30,8 @@ public class GameController implements GameApi {
 
     @Override
     public List<Scenario> createLeconScenarioGames(Integer leconId, String jwt) {
-        Lecon lecon = leconService.findLecon(leconId);
-        List<Scenario> scenarios = scenarioService.createScenarios(lecon);
+        LeconDto lecon = leconService.findLecon(leconId);
+        List<Scenario> scenarios = scenarioService.createScenarios(LeconDto.toEntity(lecon), jwt);
         for (Scenario scenario : scenarios) {
             scenario.setLecon(null);
         }
@@ -39,9 +40,9 @@ public class GameController implements GameApi {
 
     @Override
     public List<Communication> createLeconCommunicationGames(Integer leconId, String jwt) {
-        Lecon lecon = leconService.findLecon(leconId);
+        LeconDto lecon = leconService.findLecon(leconId);
 
-        List<Communication> communications = communicationService.createCommunications(lecon);
+        List<Communication> communications = communicationService.createCommunications(LeconDto.toEntity(lecon), jwt);
         communications.forEach((communication -> {
             communication.setLecon(null);
         }));
