@@ -1,6 +1,7 @@
 package com.enspd.mindyback.services;
 
 import com.enspd.mindyback.dto.ChapterDto;
+import com.enspd.mindyback.dto.LeconDto;
 import com.enspd.mindyback.models.Chapter;
 import com.enspd.mindyback.models.Lecon;
 
@@ -8,13 +9,13 @@ import java.util.List;
 
 public interface LeconService {
 
-    List<Lecon> createLecons(Integer chapterId);
+    List<LeconDto> createLecons(Integer chapterId , String jwt);
 
     void deleteLecon(Integer leconId);
 
-    Lecon updateLecon(Lecon lecon);
+    LeconDto updateLecon(LeconDto leconDto);
 
-    Lecon findLecon(Integer leconId);
+    LeconDto findLecon(Integer leconId);
 
-    List<Lecon> findLeconsByChapter(Integer chapterId);
+    List<LeconDto> findLeconsByChapter(Integer chapterId);
 }

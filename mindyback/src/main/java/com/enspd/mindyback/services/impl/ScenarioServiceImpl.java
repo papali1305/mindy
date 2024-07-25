@@ -1,10 +1,12 @@
 package com.enspd.mindyback.services.impl;
 
+import com.enspd.mindyback.dto.UserDto;
 import com.enspd.mindyback.models.Lecon;
 import com.enspd.mindyback.models.Scenario;
 import com.enspd.mindyback.repository.ScenarioRepository;
 import com.enspd.mindyback.services.IaService;
 import com.enspd.mindyback.services.ScenarioService;
+import com.enspd.mindyback.services.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +23,23 @@ public class ScenarioServiceImpl implements ScenarioService {
 
     @Autowired
     private IaService iaService;
+    @Autowired
+    private UserService userService;
 
     @Override
     @Transactional
 
-    public List<Scenario> createScenarios(Lecon lecon) {
-        List<Scenario> scenarios = iaService.createScenarios(lecon);
+    public List<Scenario> createScenarios(Lecon lecon, String jwt) {
+        UserDto userDto = userService.findUserByJwt(jwt);
+
+        List<Scenario> scenarios = iaService.createScenarios(lecon, userDto);
         List<Scenario> scenariosToSend = new ArrayList<>();
 
         scenarios.forEach(scenario -> {
             scenario.setPassed(false);
             scenario.setLecon(lecon);
             scenariosToSend.add(scenarioRepository.save(scenario));
-           // scenario.getScenarioScene().setScenario(null);
+            // scenario.getScenarioScene().setScenario(null);
 
         });
         return scenariosToSend;
@@ -54,7 +60,7 @@ public class ScenarioServiceImpl implements ScenarioService {
 
     public Scenario updateScenario(Scenario scenario) {
         Scenario scenario1 = findScenario(scenario.getId());
-        BeanUtils.copyProperties(scenario, scenario1, "id" );
+        BeanUtils.copyProperties(scenario, scenario1, "id");
         return scenarioRepository.save(scenario1);
     }
 }

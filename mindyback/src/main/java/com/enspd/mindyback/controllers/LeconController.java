@@ -3,6 +3,7 @@ package com.enspd.mindyback.controllers;
 
 import com.enspd.mindyback.controllers.api.LeconApi;
 import com.enspd.mindyback.dto.ChapterDto;
+import com.enspd.mindyback.dto.LeconDto;
 import com.enspd.mindyback.models.Chapter;
 import com.enspd.mindyback.models.Lecon;
 import com.enspd.mindyback.models.Scenario;
@@ -25,24 +26,20 @@ public class LeconController implements LeconApi {
     private ChapterService chapterService;
 
     @Override
-    public List<Lecon> createChapterLecons(Integer chapterId, String jwt) {
+    public List<LeconDto> createChapterLecons(Integer chapterId, String jwt) {
 
-        List<Lecon> lecons = leconService.createLecons(chapterId);
-        for (Lecon lecon : lecons) {
-            lecon.setChapter(null);
-        }
+        List<LeconDto> lecons = leconService.createLecons(chapterId, jwt);
 
-        System.out.println(lecons);
         return lecons;
     }
 
     @Override
-    public List<Lecon> findChapterLecons(Integer ChapterId) {
+    public List<LeconDto> findChapterLecons(Integer ChapterId) {
         return leconService.findLeconsByChapter(ChapterId);
     }
 
     @Override
-    public Lecon findLeconById(Integer id) {
+    public LeconDto findLeconById(Integer id) {
         return leconService.findLecon(id);
     }
 
@@ -52,7 +49,7 @@ public class LeconController implements LeconApi {
     }
 
     @Override
-    public Lecon UpdateLecon(Lecon lecon, String jwt) {
+    public Lecon UpdateLecon(LeconDto leconDto, String jwt) {
         return null;
     }
 }

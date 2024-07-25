@@ -1,5 +1,6 @@
 package com.enspd.mindyback.controllers.api;
 
+import com.enspd.mindyback.dto.LeconDto;
 import com.enspd.mindyback.models.Chapter;
 import com.enspd.mindyback.models.Lecon;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,20 +14,20 @@ import static com.enspd.mindyback.config.Utils.LECON_ENDPOINT;
 public interface LeconApi {
 
     @PostMapping(LECON_ENDPOINT + "/createLecons")
-    public List<Lecon> createChapterLecons(@RequestBody Integer chapterId, @RequestHeader(name = "Authorization") String jwt);
+    public List<LeconDto> createChapterLecons(@RequestBody Integer chapterId, @RequestHeader(name = "Authorization") String jwt);
 
 
     @GetMapping(LECON_ENDPOINT + "/findAll/{chapterId}")
-    public List<Lecon> findChapterLecons(@PathVariable("chapterId") Integer chapterId);
+    public List<LeconDto> findChapterLecons(@PathVariable("chapterId") Integer chapterId);
 
     @GetMapping(LECON_ENDPOINT + "/findById/{id}")
-    public Lecon findLeconById(@PathVariable("id") Integer id);
+    public LeconDto findLeconById(@PathVariable("id") Integer id);
 
 
     @DeleteMapping(LECON_ENDPOINT + "/delete/{id}")
     public void deleteLecon( @PathVariable("id") Integer id);
 
     @PutMapping(LECON_ENDPOINT + "/update")
-    public Lecon UpdateLecon(@RequestBody Lecon lecon, @RequestHeader(name = "Authorization") String jwt);
+    public Lecon UpdateLecon(@RequestBody LeconDto lecon, @RequestHeader(name = "Authorization") String jwt);
 
 }

@@ -7,7 +7,7 @@ import com.enspd.mindyback.models.Communication;
 import java.util.List;
 
 public interface CommunicationService {
-    public List<Communication> createCommunications(Lecon lecon);
+    public List<Communication> createCommunications(Lecon lecon , String jwt);
 
     Communication findCommunication(Integer idCommunication);
 

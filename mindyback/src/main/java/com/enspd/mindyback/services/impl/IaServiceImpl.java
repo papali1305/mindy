@@ -95,8 +95,7 @@ public class IaServiceImpl implements IaService {
 
 
     @Override
-
-    public List<Scenario> createScenarios(Lecon lecon) {
+    public List<Scenario> createScenarios(Lecon lecon, UserDto user) {
 
         var mistralAiApi = new MistralAiApi(mistralAiToken);
 
@@ -107,44 +106,58 @@ public class IaServiceImpl implements IaService {
                 .build());
 
         ChatResponse response = chatModel.call(
-                new Prompt("""
-                                                   
-                                   Tu es un expert qui maîtrise les sujets suivants : Psychiatrie, psychologie, neurologie, orthophonie, ergothérapie, analyse des comportements certifiés, éducation spécialisée, travail social, psychomotricité et intégration sensorielle ; le tout dans le domaine de l'autisme. Tu as établi un programme pour un autiste et un ensemble de leçons.\s
-                                                   
-                                   Le système a été pensé ainsi : à partir des informations sur la leçon du jour, tu crées des scénarios qui sont des jeux. D'abord, tu décides du scénario et de ce qu'il aborde au sujet de la leçon. Après l'avoir décidé, tu génères une description de la scène qui sera plus tard représentée en une image. Ensuite, tu génères une question sur cette scène. L'autiste répond et tu apprécies sa réponse.
-                                                   
-                                   Voici où nous en sommes :
-                                   Nous sommes sur la leçon """ + lecon.getName() + """
-                                   parlant de """ + lecon.getDescription() + """
-                                   avec pour objectif """ + lecon.getObjectives() + """
-                                                           
-                                           Le scénario est composé d'une image qui sera envoyée avec un contexte. L'utilisateur est un autiste pour lui apprendre cette leçon.
-                                           Tu vas décrire 10 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
-                                           - scenarioName : "le nom du scénario";
-                                           - scenarioDescription : "la description courte du scénario. pas plus de 100 mots";
-                                           - aiQuestion : "la question à poser à l'autiste portant sur la leçon et le scénario que tu as généré. sois court et concis";
-                                           - prompt : "un prompt qui sera envoyé à une IA de génération d'image qui va, à partir de ce prompt, créer une image correspondante à la description du scénario puis sera envoyée à l'utilisateur. 
-                                           Lors de l ecriture du prompt prends en compte que la pluspart des personnes doivent etre noir que l'ia doit mettre l'accent sur certains details de la scene que tu preciseras.";
-                                           - scenarioType : "peut être soit RECOGNIZE_FACIAL_EXPRESSIONS, APPROPRIATE_REACTIONS, UNDERSTAND_EMOTIONS, COMMUNICATION_SKILLS, CONFLICT_RESOLUTION, GROUP_ACTIVITIES, DAILY_LIFE_SKILLS, SCHOOL_WORK_BEHAVIOR".
-                                           - contexte : "une description breve de l image demande / du prompt pas plus de 30 mots";
-                                           Attention :
-                                           Le résultat doit être au format JSON avec uniquement les informations demandées. Ne répond que par le JSON des scénarios, rien d'autre, aucun commentaire. Ta réponse doit pouvoir être convertie en JSON avec uniquement les informations demandées. N'oublie pas de remplir tous les champs.
-                                           
-                                           Exemple de format JSON attendu :
-                                           [
-                                             {
-                                               "scenarioName": "Nom du scénario",
-                                               "scenarioDescription": "Description du scénario.",
-                                               "aiQuestion": "Question à poser à l'autiste.",
-                                               "prompt": "Prompt pour l'IA de génération d'image.",
-                                               "scenarioType": "Type de scénario",
-                                               "context": "Description de l image demande / du prompt"
-                                             },
-                                             ...
-                                           ]
-                                                           
-                                   """
-                ));
+                new Prompt(Arrays.asList(
+                        new SystemMessage(
+                                """
+                                                        
+                                        Tu es un expert qui maîtrise les sujets suivants : Psychiatrie, psychologie, neurologie, orthophonie, ergothérapie, analyse des comportements certifiés, éducation spécialisée, travail social, psychomotricité et intégration sensorielle ; le tout dans le domaine de l'autisme. Tu as établi un programme pour un autiste et un ensemble de leçons.\s
+                                                        
+                                        Le système a été pensé ainsi : à partir des informations sur la leçon du jour, tu crées des scénarios qui sont des jeux. D'abord, tu décides du scénario et de ce qu'il aborde au sujet de la leçon. Après l'avoir décidé, tu génères une description de la scène qui sera plus tard représentée en une image. Ensuite, tu génères une question sur cette scène. L'autiste répond et tu apprécies sa réponse.
+                                                        
+                                        Voici où nous en sommes :
+                                        Nous sommes sur la leçon """ + lecon.getName() + """
+                                        parlant de """ + lecon.getDescription() + """
+                                        avec pour objectif """ + lecon.getObjectives() + """
+                                                                
+                                                Le scénario est composé d'une image qui sera envoyée avec un contexte. L'utilisateur est un autiste pour lui apprendre cette leçon.
+                                                Tu vas décrire 10 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
+                                                - scenarioName : "le nom du scénario";
+                                                - scenarioDescription : "la description courte du scénario. pas plus de 100 mots";
+                                                - aiQuestion : "la question à poser à l'autiste portant sur la leçon et le scénario que tu as généré. sois court et concis";
+                                                - prompt : "un prompt qui sera envoyé à une IA de génération d'image qui va, à partir de ce prompt, créer une image correspondante à la description du scénario puis sera envoyée à l'utilisateur. 
+                                                Lors de l ecriture du prompt prends en compte que la pluspart des personnes doivent etre noir que l'ia doit mettre l'accent sur certains details de la scene que tu preciseras.";
+                                                - scenarioType : "peut être soit RECOGNIZE_FACIAL_EXPRESSIONS, APPROPRIATE_REACTIONS, UNDERSTAND_EMOTIONS, COMMUNICATION_SKILLS, CONFLICT_RESOLUTION, GROUP_ACTIVITIES, DAILY_LIFE_SKILLS, SCHOOL_WORK_BEHAVIOR".
+                                                - contexte : "une description breve de l image demande / du prompt pas plus de 30 mots";
+                                                Attention :
+                                                Le résultat doit être au format JSON avec uniquement les informations demandées. Ne répond que par le JSON des scénarios, rien d'autre, aucun commentaire. Ta réponse doit pouvoir être convertie en JSON avec uniquement les informations demandées. N'oublie pas de remplir tous les champs.
+                                                
+                                                Exemple de format JSON attendu :
+                                                [
+                                                  {
+                                                    "scenarioName": "Nom du scénario",
+                                                    "scenarioDescription": "Description du scénario.",
+                                                    "aiQuestion": "Question à poser à l'autiste.",
+                                                    "prompt": "Prompt pour l'IA de génération d'image.",
+                                                    "scenarioType": "Type de scénario",
+                                                    "context": "Description de l image demande / du prompt"
+                                                  },
+                                                  ...
+                                                ]
+                                                                
+                                        """
+                        ), new UserMessage(
+                                """ 
+                                        '''
+                                        comorbidities : """ + user.comorbidities() + """
+                                        ;   age : """ + user.age() + """
+                                        ;   gender : """ + user.gender() + """
+                                        ;   city : """ + user.city() + """
+                                        ;   state : """ + user.state() + """
+                                        ;   country : """ + user.country() + """
+                                        '''
+                                        """
+                        )
+                )));
 
         try {
 
@@ -212,7 +225,7 @@ public class IaServiceImpl implements IaService {
             });
             return scenarios;
 
-        }  catch (JSONException e) {
+        } catch (JSONException e) {
             throw new InvalidEntityException("La reponse de l'IA n'est pas valide et ne peut pas être traitée en json", ErrorCodes.IA_RESPONSE_NOT_VALID);
         } catch (Exception e) {
             e.printStackTrace();
@@ -222,55 +235,72 @@ public class IaServiceImpl implements IaService {
     }
 
     @Override
-    public List<Communication> createCommunication(Lecon lecon) {
+    public List<Communication> createCommunication(Lecon lecon, UserDto user) {
 
         var mistralAiApi = new MistralAiApi(mistralAiToken);
 
         var chatModel = new MistralAiChatModel(mistralAiApi, MistralAiChatOptions.builder()
                 .withModel(MistralAiApi.ChatModel.OPEN_MIXTRAL_22B.getValue())
-                .withTemperature(1f)
+                .withTemperature(.8f)
                 .withTopP(1F)
                 .build());
 
         ChatResponse response = chatModel.call(
-                new Prompt("""
-                                                   
-                                   Tu es un expert qui maîtrise les sujets suivants : Psychiatrie, psychologie, neurologie, orthophonie, ergothérapie, analyse des comportements certifiés, éducation spécialisée, travail social, psychomotricité et intégration sensorielle ; le tout dans le domaine de l'autisme. Tu as établi un programme pour un autiste et un ensemble de leçons.\s
-                                                   
-                                   Le système a été pensé ainsi : à partir des informations sur la leçon du jour, tu crées des scénarios de conversation. D'abord, tu décides du scénario et de ce qu'il aborde au sujet de la leçon. Après l'avoir décidé, tu génères en fonction du type de scenario demande un nouveau scenario. dans le scenario tu simules une conversation entre deux ou plusieurs personnes dont l autiste et l autiste doit completer la conversation.
-                                    le scenario peut etre de type : INIT_CONV (initier une conversation), END_CONV(terminer une conversation), CONTINUE_CONV (continuer une conversation afin d apprendre a converser)            
-                                   Voici où nous en sommes :
-                                   Nous sommes sur la leçon """ + lecon.getName() + """
-                                   parlant de """ + lecon.getDescription() + """
-                                   avec pour objectif """ + lecon.getObjectives() + """
-                                               
-                                            L'utilisateur est un autiste pour lui apprendre cette leçon.
-                                           Tu vas décrire 5 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
-                                           - aiConv : "la simulation de la conversation un string json . la conversation doit etre la plus humaine possible: 
-                                           en json avec pour champs les intervenants (imagine des noms) et pour valeur des champs leurs repartis;
-                                            le champ correspondant a la reponse attendue de l autiste est you et a pour valeur 'blank'  ";
-                                           - communicationType : "le type du scenario";
-                                           - context : "le contexte de cette discussion c est a dire ou elle a lieu pourquoi elle a lieu comment elle s est mise en place. pas plus de 30 mots";
-                                           - name : "le nom du scénario";
-                                           - description : "la description du scénario";
-                                           Attention :
-                                           Le résultat doit être au format JSON avec uniquement les informations demandées. Ne répond que par le JSON des scénarios, rien d'autre, aucun commentaire. Ta réponse doit pouvoir être convertie en JSON avec uniquement les informations demandées. N'oublie pas de remplir tous les champs.
-                                           
-                                           Exemple de format JSON attendu :
-                                           [
-                                             {
-                                             "name": "...",
-                                             "description": "...",
-                                             "aiConv": "...",
-                                             "communicationType": "...",
-                                             "context": "...",
-                                               
-                                             },
-                                             ...
-                                           ]
-                                                           
-                                   """
-                ));
+                new Prompt(Arrays.asList(
+                        new SystemMessage("""
+                                                                    
+                                                    Tu es un expert qui maîtrise les sujets suivants : Psychiatrie, psychologie, neurologie, orthophonie, ergothérapie, analyse des comportements certifiés, éducation spécialisée, travail social, psychomotricité et intégration sensorielle ; le tout dans le domaine de l'autisme. Tu as établi un programme pour un autiste et un ensemble de leçons.\s
+                                                                    
+                                                    Le système a été pensé ainsi : à partir des informations sur la leçon du jour, tu crées des scénarios de conversation. D'abord, tu décides du scénario et de ce qu'il aborde au sujet de la leçon. Après l'avoir décidé, tu génères en fonction du type de scenario demande un nouveau scenario. dans le scenario tu simules une conversation entre deux ou plusieurs personnes dont l autiste et l autiste doit completer la conversation.
+                                                     le scenario peut etre de type : INIT_CONV (initier une conversation), END_CONV(terminer une conversation), CONTINUE_CONV (continuer une conversation afin d apprendre a converser)            
+                                                     A partir des informations sur l autiste et sur le chapitre, tu crées des scenarios adaptes a l autiste a partir des informations envoyes par l utilisateur.
+                                                  les informations sur l autiste seront entres  par l utilisateur et entre les triples backtips ''' .
+                                                                                                
+                                                    Voici où nous en sommes :
+                                                    Nous sommes sur la leçon """ + lecon.getName() + """
+                                                  parlant de """ + lecon.getDescription() + """
+                                                  avec pour objectif """ + lecon.getObjectives() + """
+                                                              
+                                                           L'utilisateur est un autiste pour lui apprendre cette leçon.
+                                                          Tu vas décrire 5 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
+                                                          - aiConv : "la simulation de la conversation un string json . la conversation doit etre la plus humaine possible: 
+                                                          en json avec pour champs les intervenants (imagine des noms) et pour valeur des champs leurs repartis;
+                                                           le champ correspondant a la reponse attendue de l autiste est you et a pour valeur 'blank'  ";
+                                                          - communicationType : "le type du scenario";
+                                                          - context : "le contexte de cette discussion c est a dire ou elle a lieu pourquoi elle a lieu comment elle s est mise en place. pas plus de 30 mots";
+                                                          - name : "le nom du scénario";
+                                                          - description : "la description du scénario";
+                                                          Attention :
+                                                          Le résultat doit être au format JSON avec uniquement les informations demandées. Ne répond que par le JSON des scénarios, rien d'autre, aucun commentaire. Ta réponse doit pouvoir être convertie en JSON avec uniquement les informations demandées. N'oublie pas de remplir tous les champs.
+                                                          
+                                                          Exemple de format JSON attendu :
+                                                          [
+                                                            {
+                                                            "name": "...",
+                                                            "description": "...",
+                                                            "aiConv": "...",
+                                                            "communicationType": "...",
+                                                            "context": "...",
+                                                              
+                                                            },
+                                                            ...
+                                                          ]
+                                                                          
+                                                  """),
+                        new UserMessage(
+                                """ 
+                                        '''
+                                        comorbidities : """ + user.comorbidities() + """
+                                        ;   age : """ + user.age() + """
+                                        ;   gender : """ + user.gender() + """
+                                        ;   city : """ + user.city() + """
+                                        ;   state : """ + user.state() + """
+                                        ;   country : """ + user.country() + """
+                                        '''
+                                        """
+                        )
+
+                )));
 
         try {
 
@@ -309,7 +339,7 @@ public class IaServiceImpl implements IaService {
             });
             return communications;
 
-        }  catch (JSONException e) {
+        } catch (JSONException e) {
             throw new InvalidEntityException("La reponse de l'IA n'est pas valide et ne peut pas être traitée en json", ErrorCodes.IA_RESPONSE_NOT_VALID);
         } catch (Exception e) {
             e.printStackTrace();
@@ -318,57 +348,76 @@ public class IaServiceImpl implements IaService {
     }
 
     @Override
-    public List<Lecon> createLecons(Chapter chapter) {
+    public List<Lecon> createLecons(Chapter chapter, UserDto user) {
 
         var mistralAiApi = new MistralAiApi(mistralAiToken);
 
         var chatModel = new MistralAiChatModel(mistralAiApi, MistralAiChatOptions.builder()
                 .withModel(MistralAiApi.ChatModel.OPEN_MIXTRAL_22B.getValue())
-                .withTemperature(1f)
+                .withTemperature(.8f)
                 .withTopP(1F)
                 .build());
 
         ChatResponse response = chatModel.call(
-                new Prompt("""
+                new Prompt(
+                        Arrays.asList(
+                                new SystemMessage(
+                                        """
 
-                                                   Tu es un expert qui maîtrise les sujets suivants :
-                                   Psychiatrie, psychologie, neurologie, orthophonie, ergothérapie, analyse des comportements certifiés, éducation
-                                   spécialisée, travail social, psychomotricité et intégration sensorielle;
-                                   le tout dans le domaine de l 'autisme. Tu as établi un programme pour un autiste et un ensemble de chapitres.
+                                                 Tu es un expert qui maîtrise les sujets suivants :
+                                                Psychiatrie, psychologie, neurologie, orthophonie, ergothérapie, analyse des comportements certifiés, éducation
+                                                spécialisée, travail social, psychomotricité et intégration sensorielle;
+                                                le tout dans le domaine de l 'autisme. Tu as établi un programme pour un autiste et un ensemble de chapitres.
 
-                                   Le système a été pensé ainsi :à partir des informations sur le chapitre et sur l autiste, tu crées des
-                                   lecons progressives.
-                                   Voici les informations sur le chapitre :
-                                                                      
-                                   -""" + chapter.getName() + """
-                                    :"le nom du chapitre";
-                                   - """ + chapter.getDescription() + """
-                                    :"la description du chapitre";
-                                   - """ + chapter.getObjectives() + """
-                                         :"le objectif du chapitre";
-                                     
-                                    Tu vas décrire 9 lecons portant sur le chapitre .Chaque lecon est composé des champs suivants:
-                                         
-                                    -  name : le nom de la lecon pas plus de 10 mots;
-                                                              
-                                    - description : la description de la lecon pas plus de 100 mots;
-                                                              
-                                    - objectives : les objectifs specifiques de la lecon pas plus de 100 mots;
-                                   Attention:
-                                   Le résultat doit être au format JSON avec uniquement les informations demandées.Ne répond que par le JSON
-                                   des scénarios, rien d'autre, aucun commentaire. Ta réponse doit pouvoir être convertie en JSON avec uniquement les informations demandées n'oublie pas de remplir tous les champs.
+                                                Le système a été pensé ainsi :à partir des informations sur le chapitre et sur l autiste, tu crées des
+                                                lecons progressives.
+                                                A partir des informations sur l autiste et sur le chapitre, tu crées des lecons progressives avec des sujets de plus en plus avances et progressifs et adaptes a l autiste a partir des informations envoyes par l utilisateur.
+                                                les informations sur l autiste seront entres  par l utilisateur et entre les triples backtips ''' .
+                                                Voici les informations sur le chapitre :
+                                                                                   
+                                                -""" + chapter.getName() + """
+                                                 :"le nom du chapitre";
+                                                - """ + chapter.getDescription() + """
+                                                 :"la description du chapitre";
+                                                - """ + chapter.getObjectives() + """
+                                                      :"le objectif du chapitre";
+                                                  
+                                                 Tu vas décrire 9 lecons portant sur le chapitre .Chaque lecon est composé des champs suivants:
+                                                      
+                                                 -  name : le nom de la lecon pas plus de 10 mots;
+                                                                           
+                                                 - description : la description de la lecon pas plus de 100 mots;
+                                                                           
+                                                 - objectives : les objectifs specifiques de la lecon pas plus de 100 mots;
+                                                Attention:
+                                                Le résultat doit être au format JSON avec uniquement les informations demandées.Ne répond que par le JSON
+                                                des scénarios, rien d'autre, aucun commentaire. Ta réponse doit pouvoir être convertie en JSON avec uniquement les informations demandées n'oublie pas de remplir tous les champs.
 
-                                                 Exemple de format JSON attendu :
-                                        [{
-                                             nom: "...",
-                                             description:"...",
-                                             objectives:"..."
-                                         },
-                                         ...
-                                        ]
+                                                              Exemple de format JSON attendu :
+                                                     [{
+                                                          nom: "...",
+                                                          description:"...",
+                                                          objectives:"..."
+                                                      },
+                                                      ...
+                                                     ]
 
-                                    """
-                ));
+                                                 """
+                                )
+                                ,
+                                new UserMessage(
+                                        """ 
+                                                '''
+                                                comorbidities : """ + user.comorbidities() + """
+                                                ;   age : """ + user.age() + """
+                                                ;   gender : """ + user.gender() + """
+                                                ;   city : """ + user.city() + """
+                                                ;   state : """ + user.state() + """
+                                                ;   country : """ + user.country() + """
+                                                '''
+                                                """
+                                )
+                        )));
 
         try {
 
@@ -388,7 +437,7 @@ public class IaServiceImpl implements IaService {
             });
             return lecons;
 
-        }  catch (JSONException e) {
+        } catch (JSONException e) {
             throw new InvalidEntityException("La reponse de l'IA n'est pas valide et ne peut pas être traitée en json", ErrorCodes.IA_RESPONSE_NOT_VALID);
         } catch (Exception e) {
             e.printStackTrace();
@@ -424,17 +473,17 @@ public class IaServiceImpl implements IaService {
                                   spécialisée, travail social, psychomotricité et intégration sensorielle;
                                   le tout dans le domaine de l 'autisme.
                                   Tu as établi un programme pour un autiste et un exercice sous forme de jeu c est le moment de corriger l'exercice.\s
-                                                        
+
                                   L exercice a ete pense ainsi tu as donne une image avec un contexte de l image et tu as pose une question relative a la question et a l'image a l autiste; celui ci va te repondre  et tu analyseras sa reponse ensuite le corrigeras.
                                   Voici les informations sur l'exercice :
-                                                                                                      
+
                                  -""" + scenario.getName() + """
                                   :"le nom de l'exercice";
                                  - """ + scenario.getDescription() + """
                                   :"la description de l'exercice";
-                                 - """ + scenario.getType() + """ 
+                                 - """ + scenario.getType() + """
                                   : c est le type de l'exercice; il peut etre soit RECOGNIZE_FACIAL_EXPRESSIONS, APPROPRIATE_REACTIONS, UNDERSTAND_EMOTIONS, COMMUNICATION_SKILLS, CONFLICT_RESOLUTION, GROUP_ACTIVITIES, DAILY_LIFE_SKILLS, SCHOOL_WORK_BEHAVIOR ;
-                                 - """ + scenario.getAiQuestion() + """ 
+                                 - """ + scenario.getAiQuestion() + """
                                  : la question que tu as pose a l autiste;
                                  - """ + scenario.getLecon().getObjectives() + """
                                  : l'objectif de l'exercice;
@@ -444,7 +493,7 @@ public class IaServiceImpl implements IaService {
                                  - """ + scenario.getUserResponse() + """
                                                                                    '''.
                                   Corrige l' exercice en generant un json comportant les champs suivants:
-                                                    
+
                                   -  analysis : une analyse de la reponse de l autiste. pas plus de 30 mots;
                                   -  response : la reponse corrigee par l autiste. pas plus de 30 mots;
                                   - isCorrect : un booléen qui indique si l autiste a repondu correctement ou pas. true si il a repondu correctement, false sinon;
@@ -464,7 +513,7 @@ public class IaServiceImpl implements IaService {
             case COMMUNICATION:
                 Communication communication = communicationRepository.findById(game.getId()).orElseThrow(() -> new RuntimeException("Aucun communication trouvé avec l id " + game.getId()));
                 prompt = """
-                                         
+
                                          Tu es un expert qui maîtrise les sujets suivants :
                                  Psychiatrie, psychologie, neurologie, orthophonie, ergothérapie, analyse des comportements certifiés, éducation
                                  spécialisée, travail social, psychomotricité et intégration sensorielle;
@@ -472,22 +521,22 @@ public class IaServiceImpl implements IaService {
                                  Tu as établi un programme pour un autiste et un exercice sous forme de jeu c est le moment de corriger l'exercice.\s
 
                                  L exercice a ete pense ainsi : tu as décides du scénario et de ce qu'il aborde au sujet de la leçon. Après l'avoir décidé, tu as génères en fonction du type de scenario demande un nouveau scenario. dans le scenario tu as simules une conversation entre deux ou plusieurs personnes dont l autiste et l autiste doit completer la conversation.
-                                    le scenario peut etre de type : INIT_CONV (initier une conversation), END_CONV(terminer une conversation), CONTINUE_CONV (continuer une conversation afin d apprendre a converser) 
+                                    le scenario peut etre de type : INIT_CONV (initier une conversation), END_CONV(terminer une conversation), CONTINUE_CONV (continuer une conversation afin d apprendre a converser)
                                     Voici les informations sur l'exercice :
 
                                                              -""" + communication.getName() + """
                                                    :"le nom de l'exercice";
                                  - """ + communication.getDescription() + """
                                  :"la description de l'exercice";
-                                 - """ + communication.getType() + """ 
+                                 - """ + communication.getType() + """
                                  : c est le type de l'exercice; il peut etre soit   INIT_CONV, END_CONV, CONTINUE_CONV ;
-                                 - """ + communication.getAiConv() + """ 
+                                 - """ + communication.getAiConv() + """
                                  : "la simulation de la conversation : en json avec pour valeur les intervenants; le champ correspondant a la reponse attendue de l autiste est you et a pour valeur "blank" tu remplaceras cela par la reponse que l autiste a donne";
                                  - """ + communication.getContext() + """
                                       : le contexte de la conversation
                                  - """ + communication.getLecon().getObjectives() + """
                                  : l'objectif de l'exercice;
-                                                                  
+
                                  Voici la reponse que l autiste a donne a la question : '''
                                   - """ + communication.getUserResponse() + """
                                      '''.
@@ -537,7 +586,7 @@ public class IaServiceImpl implements IaService {
     }
 
     @Override
-    public List<Chapter> createChapters(CompetenceDto competenceDto) {
+    public List<Chapter> createChapters(CompetenceDto competenceDto, UserDto user) {
 
         var mistralAiApi = new MistralAiApi(mistralAiToken);
         UserDto userDto = competenceDto.user();
@@ -560,7 +609,7 @@ public class IaServiceImpl implements IaService {
                                  - name : le nom du chapitre de type string;
                                  - description : la description du chapitre de type string;
                                  - objectives : les objectifs specifiques du chapitre de type string;
-                                                                  
+
                                  l'utilisateur est un autiste pour lui apprendre cette leçon. voici les informations qu il t enverra ignore les champs vides ou nulls:
                                  - competenceType : le type de la competence : il peut etre no verbal competence, verbal competence ou social competence l ' utilisateur t en donnera un et tes chapitres devront portes sur ce sujet;
                                  - severityLevel : le niveau de severite de l autisme : il peut etre mild, modere ou severe;
@@ -580,7 +629,7 @@ public class IaServiceImpl implements IaService {
                                      "objectives": "Objectifs du chapitre"
                                    },
                                    ...
-                                 ] 
+                                 ]
                                  """
                 ),
 
