@@ -18,12 +18,14 @@ public class Evaluation extends AbstractEntity{
     private int evaluationNumber;
 
     @Column
-    private String commentaire;
+    private String comment;
 
     @Column
-    private int progres;
+    private int progress;
+    @Column
+    private int note;
 
     @ManyToOne
-    @JoinColumn(name = "id_lecon")
+    @JoinColumn(name = "leconId")
     private Lecon lecon;
 }

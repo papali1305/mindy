@@ -1,5 +1,6 @@
 package com.enspd.mindyback.models;
 
+import com.enspd.mindyback.models.type.GameType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,12 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Game extends AbstractEntity{
+public class Game extends AbstractEntity {
 
     @Column
     private String name;
 
-    @Column
+    @Column(columnDefinition = "TEXT", length = 2000)
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -26,7 +27,7 @@ public class Game extends AbstractEntity{
     private GameType type;
 
     @ManyToOne
-    @JoinColumn(name = "id_lecon")
+    @JoinColumn(name = "leconId")
     private Lecon lecon;
 
 
@@ -39,4 +40,5 @@ public class Game extends AbstractEntity{
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "game")
     private Correction correction;
+
 }

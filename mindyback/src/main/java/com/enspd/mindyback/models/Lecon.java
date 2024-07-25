@@ -17,13 +17,16 @@ import java.util.List;
 public class Lecon extends AbstractEntity{
 
     @Column
-    private String nom;
+    private String name;
 
     @Column
     private String description;
 
     @Column
-    private String objSpec;
+    private String objectives;
+
+    @Column
+    private boolean isPassed;
 
     @OneToMany(mappedBy = "lecon", cascade = CascadeType.ALL)
     private List<Game> games;
@@ -33,6 +36,6 @@ public class Lecon extends AbstractEntity{
     private List<Evaluation> evaluation;
 
     @ManyToOne
-    @JoinColumn(name = "id_chapter")
+    @JoinColumn(name = "chapterId")
     private Chapter chapter;
 }

@@ -2,9 +2,12 @@ package com.enspd.mindyback.services.impl;
 
 import com.enspd.mindyback.models.Communication;
 import com.enspd.mindyback.models.Lecon;
+import com.enspd.mindyback.models.Scenario;
 import com.enspd.mindyback.repository.CommunicationRepository;
 import com.enspd.mindyback.services.CommunicationService;
 import com.enspd.mindyback.services.IaService;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,8 @@ public class CommunicationServiceImpl implements CommunicationService {
     private CommunicationRepository communicationRepository;
 
     @Override
+    @Transactional
+
     public List<Communication> createCommunications(Lecon lecon) {
         List<Communication> communications = iaService.createCommunication(lecon);
         List<Communication> communicationsToSend = new ArrayList<>();
@@ -44,6 +49,9 @@ public class CommunicationServiceImpl implements CommunicationService {
 
     @Override
     public Communication updateCommunication(Communication Communication) {
-        return null;
+
+        Communication existingCommunication = findCommunication(Communication.getId());
+        BeanUtils.copyProperties(Communication, existingCommunication, "id" );
+        return communicationRepository.save(existingCommunication);
     }
 }
