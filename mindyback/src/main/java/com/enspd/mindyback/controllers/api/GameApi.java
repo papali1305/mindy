@@ -1,5 +1,6 @@
 package com.enspd.mindyback.controllers.api;
 
+import com.enspd.mindyback.dto.GameDto;
 import com.enspd.mindyback.models.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +10,9 @@ import static com.enspd.mindyback.config.Utils.GAME_ENDPOINT;
 import static com.enspd.mindyback.config.Utils.LECON_ENDPOINT;
 
 public interface GameApi {
+
+    @PostMapping(GAME_ENDPOINT + "/createByLeconId/{leconId}")
+    public List<GameDto> createLeconGames(@PathVariable("leconId") Integer leconId, @RequestHeader(name = "Authorization") String jwt);
 
 
     @GetMapping(GAME_ENDPOINT + "/scenario/createbylecon/{leconId}")

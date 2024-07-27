@@ -22,8 +22,9 @@ public class Evaluation extends AbstractEntity{
 
     @Column
     private int progress;
+
     @Column
-    private int note;
+    private int note; // 0-10
 
     @ManyToOne
     @JoinColumn(name = "leconId")

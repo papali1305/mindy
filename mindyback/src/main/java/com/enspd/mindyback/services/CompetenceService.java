@@ -12,8 +12,8 @@ public interface CompetenceService {
 
     CompetenceDto updateCompetence(CompetenceDto competenceDto);
 
-    CompetenceDto getCompetence(Integer id);
+    CompetenceDto findCompetenceById(Integer id);
 
 
-    List<CompetenceDto> getAllCompetences(Integer idUser);
+    List<CompetenceDto> findAllCompetences(Integer idUser);
 }

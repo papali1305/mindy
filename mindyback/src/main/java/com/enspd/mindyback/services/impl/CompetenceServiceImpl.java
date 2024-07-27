@@ -59,13 +59,13 @@ public class CompetenceServiceImpl implements CompetenceService {
     }
 
     @Override
-    public CompetenceDto getCompetence(Integer id) {
+    public CompetenceDto findCompetenceById(Integer id) {
         return competenceRepository.findById(id).map(CompetenceDto::fromEntity).orElseThrow(() ->
                 new EntityNotFoundException("Competence not found with id :" + id, ErrorCodes.COMPETENCE_NOT_FOUND));
     }
 
     @Override
-    public List<CompetenceDto> getAllCompetences(Integer idUser) {
+    public List<CompetenceDto> findAllCompetences(Integer idUser) {
         return competenceRepository.findAllByUserId(idUser).orElseThrow(() ->
                 new EntityNotFoundException("Aucune competence trouvée pour l'utilisateur " + idUser, ErrorCodes.COMPETENCE_NOT_FOUND)
         ).stream().map(CompetenceDto::fromEntity).toList();

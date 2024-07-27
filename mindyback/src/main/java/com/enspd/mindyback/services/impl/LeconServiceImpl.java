@@ -8,6 +8,7 @@ import com.enspd.mindyback.exception.ErrorCodes;
 import com.enspd.mindyback.exception.InvalidOperationException;
 import com.enspd.mindyback.models.Chapter;
 import com.enspd.mindyback.models.Lecon;
+import com.enspd.mindyback.models.type.CompetenceType;
 import com.enspd.mindyback.repository.ChapterRepository;
 import com.enspd.mindyback.repository.LeconRepository;
 import com.enspd.mindyback.services.ChapterService;
@@ -85,5 +86,18 @@ public class LeconServiceImpl implements LeconService {
     @Override
     public List<LeconDto> findLeconsByChapter(Integer chapterId) {
         return leconRepository.findByChapterId(chapterId).orElseThrow(() -> new EntityNotFoundException("aucune lecon  trouve pour le chapitre avec l'id " + chapterId, ErrorCodes.LECONS_NOT_FOUND)).stream().map(LeconDto::fromEntity).toList();
+    }
+
+    @Override
+    public void validateLecon(Integer id) {
+        Lecon lecon = leconRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Impossible de valider le lecon avec l id :" + id, ErrorCodes.LECON_NOT_FOUND));
+        lecon.setPassed(true);
+        leconRepository.save(lecon);
+    }
+
+    @Override
+    public CompetenceType findLeconCompetenceType(Integer leconId) {
+        return CompetenceType.valueOf(
+                leconRepository.findCompetenceTypeByLeconId(leconId).orElseThrow(() -> new EntityNotFoundException("Impossible de trouver le type de competence pour le lecon avec l id :" + leconId, ErrorCodes.COMPETENCE_TYPE_NOT_FOUND)));
     }
 }

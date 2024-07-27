@@ -120,7 +120,7 @@ public class IaServiceImpl implements IaService {
                                         avec pour objectif """ + lecon.getObjectives() + """
                                                                 
                                                 Le scénario est composé d'une image qui sera envoyée avec un contexte. L'utilisateur est un autiste pour lui apprendre cette leçon.
-                                                Tu vas décrire 10 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
+                                                Tu vas décrire 5 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
                                                 - scenarioName : "le nom du scénario";
                                                 - scenarioDescription : "la description courte du scénario. pas plus de 100 mots";
                                                 - aiQuestion : "la question à poser à l'autiste portant sur la leçon et le scénario que tu as généré. sois court et concis";
