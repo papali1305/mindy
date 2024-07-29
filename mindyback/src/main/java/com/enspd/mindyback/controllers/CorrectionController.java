@@ -1,6 +1,8 @@
 package com.enspd.mindyback.controllers;
 
 import com.enspd.mindyback.controllers.api.CorrectionApi;
+import com.enspd.mindyback.dto.CorrectionDto;
+import com.enspd.mindyback.dto.GameResponseDto;
 import com.enspd.mindyback.models.Correction;
 import com.enspd.mindyback.models.Game;
 import com.enspd.mindyback.services.CorrectionService;
@@ -16,11 +18,12 @@ public class CorrectionController implements CorrectionApi {
     private CorrectionService correctionService;
 
 
-    @Override
-    public Correction createCorrection(Integer GameId, String userResponse , String jwt) {
 
-        Correction correction = correctionService.createCorrection(GameId, userResponse);
-        correction.setGame(null);
+
+    @Override
+    public CorrectionDto createCorrection(Integer GameId, GameResponseDto userResponse, String jwt) {
+
+        CorrectionDto correction = correctionService.createCorrection(GameId, userResponse, jwt);
         return correction;
     }
 }

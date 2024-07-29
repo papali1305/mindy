@@ -1,11 +1,12 @@
 package com.enspd.mindyback.services;
 
+import com.enspd.mindyback.dto.CorrectionDto;
+import com.enspd.mindyback.dto.GameResponseDto;
 import com.enspd.mindyback.models.Correction;
-import com.enspd.mindyback.models.Game;
 
 public interface CorrectionService {
 
-    Correction  createCorrection(Integer gameId, String userResponse);
+    CorrectionDto createCorrection(Integer gameId, GameResponseDto userResponse, String jwt);
 
     Correction findCorrection(Integer id);
 

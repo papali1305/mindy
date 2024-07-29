@@ -11,6 +11,9 @@ public interface RewardService {
     void addGems(Integer userId, int gems);
     void addAchievements(Integer userId, int achievements);
     void addExperiencePoints(Integer userId, int experiencePoints);
+
+    void reinitExperiencePoints(Integer userId, int experiencePoints);
+
     void addLevel(Integer userId, int level);
 
 }

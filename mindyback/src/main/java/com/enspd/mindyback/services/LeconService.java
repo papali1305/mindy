@@ -23,4 +23,5 @@ public interface LeconService {
     void validateLecon(Integer id);
 
     CompetenceType findLeconCompetenceType(Integer leconId);
+
 }

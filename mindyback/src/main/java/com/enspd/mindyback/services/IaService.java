@@ -2,6 +2,7 @@ package com.enspd.mindyback.services;
 
 import com.enspd.mindyback.dto.ChapterDto;
 import com.enspd.mindyback.dto.CompetenceDto;
+import com.enspd.mindyback.dto.GameResponseDto;
 import com.enspd.mindyback.dto.UserDto;
 import com.enspd.mindyback.models.*;
 
@@ -17,7 +18,7 @@ public interface IaService {
 
     List<Lecon> createLecons(Chapter chapter , UserDto user);
 
-    Correction corrigeGame(Integer gameId, String userResponse);
+    Correction corrigeGame(Integer gameId, GameResponseDto userResponse);
 
     List<Chapter> createChapters(CompetenceDto competenceDto , UserDto user);
 }

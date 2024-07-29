@@ -17,4 +17,5 @@ public interface LeconRepository extends JpaRepository<Lecon, Integer> {
 
     @Query("SELECT c.competenceType FROM Competence c JOIN c.chapters ch JOIN ch.lecons l WHERE l.id = :leconId")
     Optional<String> findCompetenceTypeByLeconId(@Param("leconId") Integer leconId);
+
 }
