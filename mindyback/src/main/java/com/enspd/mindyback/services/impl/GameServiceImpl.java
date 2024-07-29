@@ -37,9 +37,11 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public List<GameDto> createLeconGames(Integer leconId, String jwt) {
+
         CompetenceType competenceType = leconService.findLeconCompetenceType(leconId);
         LeconDto leconDto = leconService.findLecon(leconId);
         UserDto userDto = userService.findUserByJwt(jwt);
+
         // Si verb -> compPhrase + Relier mot
         // Si non verb -> scenario Qro + scenario Qcm
         // Si social -> communication + communication Qcm

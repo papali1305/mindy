@@ -35,7 +35,8 @@ public record CommunicationDto(Integer id, Instant creationDate, Instant lastMod
 
     public static CommunicationDto fromEntity(Communication game) {
         return new CommunicationDto(game.getId(), game.getCreationDate(), game.getLastModifiedDate(), game.getName(), game.getDescription()
-                , game.isPassed(), game.getUserResponse(), game.getType(), LeconDto.fromEntity(game.getLecon()),
+                , game.isPassed(), game.getUserResponse(), game.getType(),                game.getLecon() != null ? LeconDto.fromEntity(game.getLecon()) : null
+                ,
                 game.getAiConv(), game.getCommunicationType());
     }
 }

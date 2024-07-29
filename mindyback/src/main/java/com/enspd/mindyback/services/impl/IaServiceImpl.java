@@ -306,7 +306,11 @@ public class IaServiceImpl implements IaService {
 
             String resp = response.getResult().getOutput().getContent();
             JSONArray jsonArray = new JSONArray(resp);
+            System.out.println("------------------------------------------------------------------");
+
             List<Communication> communications = new ArrayList<>();
+            System.out.println("------------------------------------------------------------------");
+
             jsonArray.forEach(jsonElement -> {
                 JSONObject contentJson = (JSONObject) jsonElement;
                 Communication communication = new Communication();
@@ -314,8 +318,10 @@ public class IaServiceImpl implements IaService {
                 communication.setDescription(contentJson.getString("description"));
 
                 communication.setAiConv(contentJson.getString("aiConv"));
-                communication.setContext(contentJson.getString("contexte"));
+                communication.setContext(contentJson.getString("context"));
                 String type = contentJson.getString("communicationType");
+                System.out.println("------------------------------------------------------------------");
+
                 switch (type) {
                     case "INIT_CONV":
                         communication.setCommunicationType(CommunicationType.INIT_CONV);

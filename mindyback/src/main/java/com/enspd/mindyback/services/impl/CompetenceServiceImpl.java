@@ -34,8 +34,6 @@ public class CompetenceServiceImpl implements CompetenceService {
     @Autowired
     private IaService iaService;
 
-    @Autowired
-    private UserService userService;
 
     @Override
     @Transactional

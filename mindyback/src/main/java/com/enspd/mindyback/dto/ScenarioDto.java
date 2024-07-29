@@ -34,7 +34,9 @@ public record ScenarioDto(Integer id, Instant creationDate, Instant lastModified
 
     public static ScenarioDto fromEntity(Scenario game) {
         return new ScenarioDto(game.getId(), game.getCreationDate(), game.getLastModifiedDate(), game.getName(), game.getDescription()
-                , game.isPassed(), game.getUserResponse(), game.getType(), LeconDto.fromEntity(game.getLecon()),
+                , game.isPassed(), game.getUserResponse(), game.getType(),
+                game.getLecon() != null ? LeconDto.fromEntity(game.getLecon()) : null
+                ,
                 game.getAiQuestion(), game.getScenarioType());
     }
 }

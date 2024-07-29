@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class User extends AbstractEntity {
 
     @Column
