@@ -4,6 +4,7 @@ import com.enspd.mindyback.dto.ChapterDto;
 import com.enspd.mindyback.dto.LeconDto;
 import com.enspd.mindyback.models.Chapter;
 import com.enspd.mindyback.models.Lecon;
+import com.enspd.mindyback.models.type.CompetenceType;
 
 import java.util.List;
 
@@ -18,4 +19,8 @@ public interface LeconService {
     LeconDto findLecon(Integer leconId);
 
     List<LeconDto> findLeconsByChapter(Integer chapterId);
+
+    void validateLecon(Integer id);
+
+    CompetenceType findLeconCompetenceType(Integer leconId);
 }

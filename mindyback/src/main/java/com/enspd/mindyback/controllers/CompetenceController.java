@@ -34,12 +34,12 @@ public class CompetenceController implements CompetenceApi {
 
     @Override
     public CompetenceDto getCompetence(Integer id , String jwt) {
-        return competenceService.getCompetence(id);
+        return competenceService.findCompetenceById(id);
     }
 
     @Override
     public List<CompetenceDto> getAllCompetences( String jwt) {
         UserDto user = userService.findUserByJwt(jwt);
-        return competenceService.getAllCompetences(user.id());
+        return competenceService.findAllCompetences(user.id());
     }
 }

@@ -120,7 +120,7 @@ public class IaServiceImpl implements IaService {
                                         avec pour objectif """ + lecon.getObjectives() + """
                                                                 
                                                 Le scénario est composé d'une image qui sera envoyée avec un contexte. L'utilisateur est un autiste pour lui apprendre cette leçon.
-                                                Tu vas décrire 10 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
+                                                Tu vas décrire 5 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
                                                 - scenarioName : "le nom du scénario";
                                                 - scenarioDescription : "la description courte du scénario. pas plus de 100 mots";
                                                 - aiQuestion : "la question à poser à l'autiste portant sur la leçon et le scénario que tu as généré. sois court et concis";
@@ -306,7 +306,11 @@ public class IaServiceImpl implements IaService {
 
             String resp = response.getResult().getOutput().getContent();
             JSONArray jsonArray = new JSONArray(resp);
+            System.out.println("------------------------------------------------------------------");
+
             List<Communication> communications = new ArrayList<>();
+            System.out.println("------------------------------------------------------------------");
+
             jsonArray.forEach(jsonElement -> {
                 JSONObject contentJson = (JSONObject) jsonElement;
                 Communication communication = new Communication();
@@ -314,8 +318,10 @@ public class IaServiceImpl implements IaService {
                 communication.setDescription(contentJson.getString("description"));
 
                 communication.setAiConv(contentJson.getString("aiConv"));
-                communication.setContext(contentJson.getString("contexte"));
+                communication.setContext(contentJson.getString("context"));
                 String type = contentJson.getString("communicationType");
+                System.out.println("------------------------------------------------------------------");
+
                 switch (type) {
                     case "INIT_CONV":
                         communication.setCommunicationType(CommunicationType.INIT_CONV);

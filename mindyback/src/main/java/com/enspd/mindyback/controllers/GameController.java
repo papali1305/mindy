@@ -1,13 +1,14 @@
 package com.enspd.mindyback.controllers;
 
 import com.enspd.mindyback.controllers.api.GameApi;
+import com.enspd.mindyback.dto.CompetenceDto;
+import com.enspd.mindyback.dto.GameDto;
 import com.enspd.mindyback.dto.LeconDto;
 import com.enspd.mindyback.models.Communication;
 import com.enspd.mindyback.models.Lecon;
 import com.enspd.mindyback.models.Scenario;
-import com.enspd.mindyback.services.CommunicationService;
-import com.enspd.mindyback.services.LeconService;
-import com.enspd.mindyback.services.ScenarioService;
+import com.enspd.mindyback.models.type.CompetenceType;
+import com.enspd.mindyback.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,9 +29,22 @@ public class GameController implements GameApi {
     @Autowired
     private LeconService leconService;
 
+    @Autowired
+    private CompetenceService competenceService;
+
+    @Autowired
+    private GameService gameService;
+
+    @Override
+    public List<GameDto> createLeconGames(Integer leconId, String jwt) {
+        return  gameService.createLeconGames(leconId, jwt);
+    }
+
     @Override
     public List<Scenario> createLeconScenarioGames(Integer leconId, String jwt) {
         LeconDto lecon = leconService.findLecon(leconId);
+
+        CompetenceType competenceType = leconService.findLeconCompetenceType(leconId);
         List<Scenario> scenarios = scenarioService.createScenarios(LeconDto.toEntity(lecon), jwt);
         for (Scenario scenario : scenarios) {
             scenario.setLecon(null);

@@ -14,7 +14,7 @@ public record LeconDto(Integer id, Instant creationDate, Instant lastModifiedDat
                 lecon.getDescription(),
                 lecon.getObjectives(),
                 lecon.isPassed(),
-                ChapterDto.fromEntity(lecon.getChapter())
+                lecon.getChapter() != null ? ChapterDto.fromEntity(lecon.getChapter()) : null
         );
     }
 
