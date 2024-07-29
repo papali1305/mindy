@@ -13,6 +13,7 @@ public interface Utils {
     String GAME_ENDPOINT = APP_ROOT + "/games";
 
     String LECON_ENDPOINT = APP_ROOT + "/lecons";
+    String REWARD_ENDPOINT = APP_ROOT + "/rewards";
 
     String COMMUNICATION_ENDPOINT = APP_ROOT + "/communications";
     String SCENARIO_ENDPOINT = APP_ROOT + "/scenarios";

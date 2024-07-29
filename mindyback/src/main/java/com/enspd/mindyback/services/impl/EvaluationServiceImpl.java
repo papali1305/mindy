@@ -1,5 +1,7 @@
 package com.enspd.mindyback.services.impl;
 
+import com.enspd.mindyback.exception.EntityNotFoundException;
+import com.enspd.mindyback.exception.ErrorCodes;
 import com.enspd.mindyback.models.Evaluation;
 import com.enspd.mindyback.models.Game;
 import com.enspd.mindyback.models.Lecon;
@@ -75,5 +77,10 @@ public class EvaluationServiceImpl implements EvaluationService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Evaluation findLastEvaluation(Integer idLecon) {
+        return evaluationRepository.findFirstByOOrderByCreationDateDescBy(idLecon).orElseThrow(() -> new EntityNotFoundException("Aucune evaluation trouve avec l id :" + idLecon , ErrorCodes.EVALUATION_NOT_FOUND));
     }
 }

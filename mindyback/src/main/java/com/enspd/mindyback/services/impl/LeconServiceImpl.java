@@ -100,4 +100,6 @@ public class LeconServiceImpl implements LeconService {
         return CompetenceType.valueOf(
                 leconRepository.findCompetenceTypeByLeconId(leconId).orElseThrow(() -> new EntityNotFoundException("Impossible de trouver le type de competence pour le lecon avec l id :" + leconId, ErrorCodes.COMPETENCE_TYPE_NOT_FOUND)));
     }
+
+
 }

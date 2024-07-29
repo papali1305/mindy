@@ -1,12 +1,14 @@
 package com.enspd.mindyback.services.impl;
 
 import com.enspd.mindyback.dto.*;
+import com.enspd.mindyback.exception.EntityNotFoundException;
 import com.enspd.mindyback.exception.ErrorCodes;
 import com.enspd.mindyback.exception.InvalidOperationException;
 import com.enspd.mindyback.models.Communication;
 import com.enspd.mindyback.models.Lecon;
 import com.enspd.mindyback.models.Scenario;
 import com.enspd.mindyback.models.type.CompetenceType;
+import com.enspd.mindyback.repository.GameRepository;
 import com.enspd.mindyback.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,9 @@ public class GameServiceImpl implements GameService {
     private CompetenceService competenceService;
     @Autowired
     private IaService iaService;
+
+    @Autowired
+    private GameRepository gameRepository;
 
     @Override
     public List<GameDto> createLeconGames(Integer leconId, String jwt) {
@@ -74,5 +79,11 @@ public class GameServiceImpl implements GameService {
             default:
                 throw new InvalidOperationException("Competence type inconnu", ErrorCodes.UNKNOWN_COMPETENCE_TYPE);
         }
+    }
+
+    @Override
+    public LeconDto findLeconByGameId(Integer gameId) {
+        Lecon lecon =  gameRepository.findLeconByGameId(gameId).orElseThrow( () -> new EntityNotFoundException("Aucune lecon trouve avec l id " + gameId, ErrorCodes.LECON_NOT_FOUND));
+        return LeconDto.fromEntity(lecon);
     }
 }

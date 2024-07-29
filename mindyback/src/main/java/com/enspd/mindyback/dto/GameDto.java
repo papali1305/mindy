@@ -1,5 +1,6 @@
 package com.enspd.mindyback.dto;
 
+import com.enspd.mindyback.models.Communication;
 import com.enspd.mindyback.models.Game;
 import com.enspd.mindyback.models.type.GameType;
 
@@ -9,7 +10,6 @@ public interface GameDto{
 
 
     public  Game toEntity() ;
-
 
 
 }

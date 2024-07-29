@@ -2,6 +2,7 @@ package com.enspd.mindyback.services.impl;
 
 import com.enspd.mindyback.dto.ChapterDto;
 import com.enspd.mindyback.dto.CompetenceDto;
+import com.enspd.mindyback.dto.GameResponseDto;
 import com.enspd.mindyback.dto.UserDto;
 import com.enspd.mindyback.exception.ErrorCodes;
 import com.enspd.mindyback.exception.InvalidEntityException;
@@ -120,7 +121,7 @@ public class IaServiceImpl implements IaService {
                                         avec pour objectif """ + lecon.getObjectives() + """
                                                                 
                                                 Le scénario est composé d'une image qui sera envoyée avec un contexte. L'utilisateur est un autiste pour lui apprendre cette leçon.
-                                                Tu vas décrire 5 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
+                                                Tu vas décrire 6 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
                                                 - scenarioName : "le nom du scénario";
                                                 - scenarioDescription : "la description courte du scénario. pas plus de 100 mots";
                                                 - aiQuestion : "la question à poser à l'autiste portant sur la leçon et le scénario que tu as généré. sois court et concis";
@@ -262,7 +263,7 @@ public class IaServiceImpl implements IaService {
                                                   avec pour objectif """ + lecon.getObjectives() + """
                                                               
                                                            L'utilisateur est un autiste pour lui apprendre cette leçon.
-                                                          Tu vas décrire 5 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
+                                                          Tu vas décrire 6 scénarios portant sur la leçon. Chaque scénario est composé des champs suivants :
                                                           - aiConv : "la simulation de la conversation un string json . la conversation doit etre la plus humaine possible: 
                                                           en json avec pour champs les intervenants (imagine des noms) et pour valeur des champs leurs repartis;
                                                            le champ correspondant a la reponse attendue de l autiste est you et a pour valeur 'blank'  ";
@@ -388,7 +389,7 @@ public class IaServiceImpl implements IaService {
                                                 - """ + chapter.getObjectives() + """
                                                       :"le objectif du chapitre";
                                                   
-                                                 Tu vas décrire 9 lecons portant sur le chapitre .Chaque lecon est composé des champs suivants:
+                                                 Tu vas décrire 6 lecons portant sur le chapitre .Chaque lecon est composé des champs suivants:
                                                       
                                                  -  name : le nom de la lecon pas plus de 10 mots;
                                                                            
@@ -452,10 +453,10 @@ public class IaServiceImpl implements IaService {
     }
 
     @Override
-    public Correction corrigeGame(Integer gameId, String userResponse) {
+    public Correction corrigeGame(Integer gameId, GameResponseDto userResponse) {
         System.out.println(gameId);
         Game game = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Aucun jeu trouvé avec l id " + gameId));
-        game.setUserResponse(userResponse);
+        game.setUserResponse(userResponse.useresponse());
         gameRepository.save(game);
         //    System.out.println(game);
 
@@ -611,7 +612,7 @@ public class IaServiceImpl implements IaService {
                                   le tout dans le domaine de l 'autisme. Tu vas établir un programme pour un autiste, un ensemble de chapitres. portant sur la competence que celui ci va te demander
                                  Le système a été pensé ainsi :à partir des informations sur l autiste qui est l utilisateur et sur la competence souhaite, tu crées un programme de chapitres progressifs
                                  Le message de l utilisateur commence avec des triples backtips ''' .
-                                 Tu repondras avec un ensemble de 30 chapitres constitue chacun d'eux des informations suivantes :
+                                 Tu repondras avec un ensemble de 3 chapitres constitue chacun d'eux des informations suivantes :
                                  - name : le nom du chapitre de type string;
                                  - description : la description du chapitre de type string;
                                  - objectives : les objectifs specifiques du chapitre de type string;

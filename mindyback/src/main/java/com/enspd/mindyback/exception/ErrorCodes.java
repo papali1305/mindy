@@ -29,12 +29,15 @@ public enum ErrorCodes {
   IA_RESPONSE_NOT_VALID(13000),
   IA_RESPONSE_NOT_FOUND(13000),
 
+  REWARD_NOT_FOUND(15001),
+
   // Liste des exception techniaues
   UNKNOWN_GAME_TYPE(14002),
   UNKNOWN_COMPETENCE_TYPE(14003),
   IMAGE_SAVE_ERROR(14000),
-  UNKNOWN_CONTEXT(14001);
+  UNKNOWN_CONTEXT(14001),
 
+  EVALUATION_NOT_FOUND(15001);
   private int code;
 
   ErrorCodes(int code) {

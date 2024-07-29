@@ -16,4 +16,6 @@ public interface EvaluationService {
     Evaluation findEvaluation(Integer id);
 
     List<Evaluation> findAllLeconEvaluations(Integer idLecon);
+
+    Evaluation findLastEvaluation(Integer idLecon);
 }
