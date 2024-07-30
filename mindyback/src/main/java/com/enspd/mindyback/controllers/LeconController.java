@@ -2,15 +2,11 @@ package com.enspd.mindyback.controllers;
 
 
 import com.enspd.mindyback.controllers.api.LeconApi;
-import com.enspd.mindyback.dto.ChapterDto;
 import com.enspd.mindyback.dto.LeconDto;
-import com.enspd.mindyback.models.Chapter;
 import com.enspd.mindyback.models.Lecon;
-import com.enspd.mindyback.models.Scenario;
 import com.enspd.mindyback.services.ChapterService;
 import com.enspd.mindyback.services.LeconService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;

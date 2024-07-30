@@ -1,6 +1,5 @@
 package com.enspd.mindyback.dto;
 
-import com.enspd.mindyback.models.Communication;
 import com.enspd.mindyback.models.Game;
 import com.enspd.mindyback.models.Scenario;
 import com.enspd.mindyback.models.type.GameType;
@@ -11,9 +10,17 @@ import java.time.Instant;
 public record ScenarioDto(Integer id, Instant creationDate, Instant lastModifiedDate, String name, String description,
                           boolean isPassed, String userResponse,
                           GameType type,
-                          LeconDto leconDto
+                          CorrectionDto correction
         , String aiQuestion, ScenarioType scenarioType) implements GameDto {
 
+
+    public static ScenarioDto fromEntity(Scenario game) {
+        return new ScenarioDto(game.getId(), game.getCreationDate(), game.getLastModifiedDate(), game.getName(), game.getDescription()
+                , game.isPassed(), game.getUserResponse(), game.getType(),
+                game.getCorrection() != null ? CorrectionDto.fromEntity(game.getCorrection()) : null
+                ,
+                game.getAiQuestion(), game.getScenarioType());
+    }
 
     @Override
     public Game toEntity() {
@@ -26,17 +33,11 @@ public record ScenarioDto(Integer id, Instant creationDate, Instant lastModified
         game.setPassed(this.isPassed);
         game.setUserResponse(this.userResponse);
         game.setType(this.type);
-        game.setLecon(LeconDto.toEntity(this.leconDto));
         game.setAiQuestion(this.aiQuestion);
         game.setScenarioType(this.scenarioType);
+        if (this.correction != null) {
+            game.setCorrection(CorrectionDto.toEntity(this.correction));
+        }
         return game;
-    }
-
-    public static ScenarioDto fromEntity(Scenario game) {
-        return new ScenarioDto(game.getId(), game.getCreationDate(), game.getLastModifiedDate(), game.getName(), game.getDescription()
-                , game.isPassed(), game.getUserResponse(), game.getType(),
-                game.getLecon() != null ? LeconDto.fromEntity(game.getLecon()) : null
-                ,
-                game.getAiQuestion(), game.getScenarioType());
     }
 }

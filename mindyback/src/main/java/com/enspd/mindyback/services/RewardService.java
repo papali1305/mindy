@@ -1,7 +1,6 @@
 package com.enspd.mindyback.services;
 
 import com.enspd.mindyback.dto.RewardDto;
-import com.enspd.mindyback.models.Reward;
 
 public interface RewardService {
     RewardDto findRewardByUserId(Integer userId);

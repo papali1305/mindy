@@ -3,7 +3,6 @@ package com.enspd.mindyback.services.impl;
 import com.enspd.mindyback.dto.*;
 import com.enspd.mindyback.models.Correction;
 import com.enspd.mindyback.models.Evaluation;
-import com.enspd.mindyback.models.User;
 import com.enspd.mindyback.repository.CorrectionRepository;
 import com.enspd.mindyback.services.*;
 import jakarta.transaction.Transactional;
@@ -42,7 +41,10 @@ public class CorrectionServiceImpl implements CorrectionService {
         Correction correction = iaService.corrigeGame(gameId, userResponse);
         LeconDto leconDto = gameService.findLeconByGameId(gameId);
         Evaluation evaluation = evaluationService.findLastEvaluation(leconDto.id());
-        if ( correction.isCorrect())   evaluation.setNote(evaluation.getNote() + 1);
+        if (correction.isCorrect()) {
+            evaluation.setNote(evaluation.getNote() + 1);
+            gameService.validateLeconGame(gameId);
+        }
         if (evaluation.getNote() == 6 && !leconDto.isPassed()) {
             leconService.validateLecon(leconDto.id());
             UserDto user = userService.findUserByJwt(jwt);

@@ -3,7 +3,6 @@ package com.enspd.mindyback.services.impl;
 import com.enspd.mindyback.dto.UserDto;
 import com.enspd.mindyback.models.Communication;
 import com.enspd.mindyback.models.Lecon;
-import com.enspd.mindyback.models.Scenario;
 import com.enspd.mindyback.repository.CommunicationRepository;
 import com.enspd.mindyback.services.CommunicationService;
 import com.enspd.mindyback.services.IaService;
@@ -30,10 +29,10 @@ public class CommunicationServiceImpl implements CommunicationService {
     @Override
     @Transactional
 
-    public List<Communication> createCommunications(Lecon lecon , String jwt) {
+    public List<Communication> createCommunications(Lecon lecon, String jwt) {
         UserDto userDto = userService.findUserByJwt(jwt);
 
-        List<Communication> communications = iaService.createCommunication(lecon , userDto);
+        List<Communication> communications = iaService.createCommunication(lecon, userDto);
         List<Communication> communicationsToSend = new ArrayList<>();
         communications.forEach(communication -> {
             communication.setPassed(false);

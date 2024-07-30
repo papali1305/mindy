@@ -45,7 +45,7 @@ public class RewardServiceImpl implements RewardService {
     }
 
     @Override
-    public  void reinitExperiencePoints(Integer userId, int experiencePoints) {
+    public void reinitExperiencePoints(Integer userId, int experiencePoints) {
         Reward reward = rewardRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("Aucune récompense trouvée pour l'utilisateur " + userId, ErrorCodes.REWARD_NOT_FOUND));
         reward.setExperiencePoints(reward.getExperiencePoints() - experiencePoints);
         rewardRepository.save(reward);

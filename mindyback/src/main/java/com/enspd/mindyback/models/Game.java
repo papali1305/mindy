@@ -32,7 +32,7 @@ public class Game extends AbstractEntity {
 
 
     @Column
-    private boolean isPassed;
+    private boolean isPassed = false;
 
     @Column
     private String userResponse;

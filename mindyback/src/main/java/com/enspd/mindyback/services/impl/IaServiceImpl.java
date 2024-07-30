@@ -1,6 +1,5 @@
 package com.enspd.mindyback.services.impl;
 
-import com.enspd.mindyback.dto.ChapterDto;
 import com.enspd.mindyback.dto.CompetenceDto;
 import com.enspd.mindyback.dto.GameResponseDto;
 import com.enspd.mindyback.dto.UserDto;
@@ -18,8 +17,6 @@ import com.enspd.mindyback.services.IaService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -28,18 +25,17 @@ import org.springframework.ai.mistralai.MistralAiChatModel;
 import org.springframework.ai.mistralai.MistralAiChatOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class IaServiceImpl implements IaService {
+
 
     @Autowired
     private GameRepository gameRepository;
@@ -488,7 +484,7 @@ public class IaServiceImpl implements IaService {
                                   :"le nom de l'exercice";
                                  - """ + scenario.getDescription() + """
                                   :"la description de l'exercice";
-                                 - """ + scenario.getType() + """
+                        - """ + scenario.getType() + """
                                   : c est le type de l'exercice; il peut etre soit RECOGNIZE_FACIAL_EXPRESSIONS, APPROPRIATE_REACTIONS, UNDERSTAND_EMOTIONS, COMMUNICATION_SKILLS, CONFLICT_RESOLUTION, GROUP_ACTIVITIES, DAILY_LIFE_SKILLS, SCHOOL_WORK_BEHAVIOR ;
                                  - """ + scenario.getAiQuestion() + """
                                  : la question que tu as pose a l autiste;
@@ -667,6 +663,189 @@ public class IaServiceImpl implements IaService {
                 chapters.add(chapter);
             });
             return chapters;
+
+        } catch (JSONException e) {
+            throw new InvalidEntityException("La reponse de l'IA n'est pas valide et ne peut pas être traitée en json", ErrorCodes.IA_RESPONSE_NOT_VALID);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new InvalidOperationException("L'IA ne répond pas", ErrorCodes.IA_RESPONSE_NOT_FOUND);
+        }
+    }
+
+    @Override
+    public List<SentenceQcm> createSentenceQcms(Lecon lecon, UserDto user) {
+        var mistralAiApi = new MistralAiApi(mistralAiToken);
+
+        var chatModel = new MistralAiChatModel(mistralAiApi, MistralAiChatOptions.builder()
+                .withModel(MistralAiApi.ChatModel.OPEN_MIXTRAL_22B.getValue())
+                .withTemperature(.8f)
+                .withTopP(1F)
+                .build());
+
+        ChatResponse response = chatModel.call(
+                new Prompt(Arrays.asList(
+                        new SystemMessage("""
+                                                                    
+                                                    Tu es un expert qui maîtrise les sujets suivants : Psychiatrie, psychologie, neurologie, orthophonie, ergothérapie, analyse des comportements certifiés, éducation spécialisée, travail social, psychomotricité et intégration sensorielle ; le tout dans le domaine de l'autisme. Tu as établi un programme pour un autiste et un ensemble de leçons.\s
+                                                                    
+                                                    Le système a été pensé ainsi : à partir des informations sur la leçon du jour, tu crees une phrase incomplete qui manque d un ou plusieurs mots et tu remplaceras ces mots manquants par le mot 'blank' . ensuite tu donneras des propositinos de mots manquants fausses mais proche de ceux manquants, puis tu donneras les mots manquants.
+                                                    l autiste doit ensuite corriger cette phrase en choisissant parmis les mots proposes ceux qui sont vrai des faux. le but de l'exercice est de faire progresser les competences vervales de l autiste .
+                                                     A partir des informations sur l autiste et sur la lecon, tu crées des une series de scenarios adaptes a l autiste a partir des informations envoyes par l utilisateur.
+                                                  les informations sur l autiste seront entres  par l utilisateur et entre les triples backtips ''' .
+                                                                                                
+                                                    Voici où nous en sommes :
+                                                    Nous sommes sur la leçon """ + lecon.getName() + """
+                                                  parlant de """ + lecon.getDescription() + """
+                                                  avec pour objectif """ + lecon.getObjectives() + """
+                                                                      
+                                                                   L'utilisateur est un autiste pour lui apprendre cette leçon;
+                                                                  Tu vas décrire 6 scenarios portant sur la leçon. Chaque scénario est composé des champs suivants :
+                                                                  - sentenceToComplete : "la phrase incomplete à corriger par l autiste . cette phrase doit porter sur la leçon du jour et sur le sujet de la leçon et les mots manquants doivent être remplacés par le mot 'blank' ";
+                                                                   le champ correspondant a la reponse attendue de l autiste est you et a pour valeur 'blank'  ";
+                                                                  - words : "la liste des mots proposes qui sont faux. pas plus de 8 mots . ce sera un tableau de mots";
+                                                                   - response : "la liste des mots proposes qui sont vrai. ce sera un tableau de mots";
+                                                                  Attention :
+                                                                  Le résultat doit être au format JSON avec uniquement les informations demandées. Ne répond que par le JSON des scénarios, rien d'autre, aucun commentaire. Ta réponse doit pouvoir être convertie en JSON avec uniquement les informations demandées. N'oublie pas de remplir tous les champs.
+                                                                  
+                                                                  Exemple de format JSON attendu :
+                                                                  [
+                                                                    {
+                                                    "sentenceToComplete": "Le 'blank' de la phrase donne des détails supplémentaires sur le verbe.",
+                                                    "words": "["sujet", "verbe", "adjectif", "article", "préposition", "pronom", "adverbe", "conjonction"]",
+                                                    "response": "["complément"]"
+                                                  },
+                                                                    ...
+                                                                  ]
+                                                                                  
+                                                          """),
+                        new UserMessage(
+                                """ 
+                                        '''
+                                        comorbidities : """ + user.comorbidities() + """
+                                        ;   age : """ + user.age() + """
+                                        ;   gender : """ + user.gender() + """
+                                        ;   city : """ + user.city() + """
+                                        ;   state : """ + user.state() + """
+                                        ;   country : """ + user.country() + """
+                                        '''
+                                        """
+                        )
+
+                )));
+
+        try {
+
+            String resp = response.getResult().getOutput().getContent();
+            JSONArray jsonArray = new JSONArray(resp);
+
+            List<SentenceQcm> sentenceQcms = new ArrayList<>();
+
+            jsonArray.forEach(jsonElement -> {
+                JSONObject contentJson = (JSONObject) jsonElement;
+                SentenceQcm sentenceQcm = new SentenceQcm();
+                sentenceQcm.setName(contentJson.getString("sentenceToComplete"));
+
+                sentenceQcm.setResponse(contentJson.getString("response"));
+
+                sentenceQcm.setWords(contentJson.getString("words"));
+
+                sentenceQcm.setType(GameType.SENTENCE_QCM);
+                sentenceQcms.add(sentenceQcm);
+
+            });
+            return sentenceQcms;
+
+        } catch (JSONException e) {
+            throw new InvalidEntityException("La reponse de l'IA n'est pas valide et ne peut pas être traitée en json", ErrorCodes.IA_RESPONSE_NOT_VALID);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new InvalidOperationException("L'IA ne répond pas", ErrorCodes.IA_RESPONSE_NOT_FOUND);
+        }
+    }
+
+
+    @Override
+    public List<SentenceCompletion> createSentenceCompletions(Lecon lecon, UserDto user) {
+        var mistralAiApi = new MistralAiApi(mistralAiToken);
+
+        var chatModel = new MistralAiChatModel(mistralAiApi, MistralAiChatOptions.builder()
+                .withModel(MistralAiApi.ChatModel.OPEN_MIXTRAL_22B.getValue())
+                .withTemperature(.8f)
+                .withTopP(1F)
+                .build());
+
+        ChatResponse response = chatModel.call(
+                new Prompt(Arrays.asList(
+                        new SystemMessage("""
+                                                                    
+                                                    Tu es un expert qui maîtrise les sujets suivants : Psychiatrie, psychologie, neurologie, orthophonie, ergothérapie, analyse des comportements certifiés, éducation spécialisée, travail social, psychomotricité et intégration sensorielle ; le tout dans le domaine de l'autisme. Tu as établi un programme pour un autiste et un ensemble de leçons.\s
+                                                                    
+                                                    Le système a été pensé ainsi : à partir des informations sur la leçon du jour, tu crees une phrase incomplete qui manque d un ou plusieurs mots et tu remplaceras ces mots manquants par le mot 'blank' .
+                                                    l autiste doit ensuite corriger cette phrase en lui envoyant le ou les mots manquants. le but de l'exercice est de faire progresser les competences vervales de l autiste.
+                                                    La phrase doit porte sur la lecon du jour et sur le sujet de la leçon appelons cette phrase un scenario.
+                                                     A partir des informations sur l autiste et sur la lecon, tu crées des une series de scenarios adaptes a l autiste a partir des informations envoyes par l utilisateur.
+                                                  les informations sur l autiste seront entres  par l utilisateur et entre les triples backtips ''' .
+                                                                                                
+                                                    Voici où nous en sommes :
+                                                    Nous sommes sur la leçon """ + lecon.getName() + """
+                                                  parlant de """ + lecon.getDescription() + """
+                                                  avec pour objectif """ + lecon.getObjectives() + """
+                                                              
+                                                           L'utilisateur est un autiste pour lui apprendre cette leçon;
+                                                          Tu vas décrire 6 scenarios portant sur la leçon. Chaque scénario est composé des champs suivants :
+                                                          - sentenceToComplete : "la phrase incomplete à corriger par l autiste . cette phrase doit porter sur la leçon du jour et sur le sujet de la leçon et les mots manquants doivent être remplacés par le mot 'blank' ";
+                                                           le champ correspondant a la reponse attendue de l autiste est you et a pour valeur 'blank'  ";
+                                                          - context : "le contexte dans lequel s inscrit cette phrase c est a dire ou elle a lieu pourquoi elle a lieu comment elle s est mise en place. pas plus de 30 mots";
+                                                                                                    
+                                                          Attention :
+                                                          Le résultat doit être au format JSON avec uniquement les informations demandées. Ne répond que par le JSON des scénarios, rien d'autre, aucun commentaire. Ta réponse doit pouvoir être convertie en JSON avec uniquement les informations demandées. N'oublie pas de remplir tous les champs.
+                                                          
+                                                          Exemple de format JSON attendu :
+                                                          [
+                                                      
+                                                             {
+                                                        "sentenceToComplete": "Le 'blank' de la phrase donne des détails supplémentaires sur le verbe. et le 'blank' du verbe donne des détails supplémentaires sur le complément.",
+                                                        "response": ["complément", "verbe"]
+                                                      },
+                                                            ...
+                                                          ]
+                                                                          
+                                                  """),
+                        new UserMessage(
+                                """ 
+                                        '''
+                                        comorbidities : """ + user.comorbidities() + """
+                                        ;   age : """ + user.age() + """
+                                        ;   gender : """ + user.gender() + """
+                                        ;   city : """ + user.city() + """
+                                        ;   state : """ + user.state() + """
+                                        ;   country : """ + user.country() + """
+                                        '''
+                                        """
+                        )
+
+                )));
+
+        try {
+
+            String resp = response.getResult().getOutput().getContent();
+            JSONArray jsonArray = new JSONArray(resp);
+
+            List<SentenceCompletion> sentenceCompletions = new ArrayList<>();
+
+            jsonArray.forEach(jsonElement -> {
+                JSONObject contentJson = (JSONObject) jsonElement;
+                SentenceCompletion sentenceCompletion = new SentenceCompletion();
+                sentenceCompletion.setName(contentJson.getString("sentenceToComplete"));
+
+                sentenceCompletion.setContext(contentJson.getString("context"));
+
+
+                sentenceCompletion.setType(GameType.SENTENCE_COMPLETION);
+                sentenceCompletions.add(sentenceCompletion);
+
+            });
+            return sentenceCompletions;
 
         } catch (JSONException e) {
             throw new InvalidEntityException("La reponse de l'IA n'est pas valide et ne peut pas être traitée en json", ErrorCodes.IA_RESPONSE_NOT_VALID);

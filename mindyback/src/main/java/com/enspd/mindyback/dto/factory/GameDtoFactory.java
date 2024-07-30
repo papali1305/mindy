@@ -17,7 +17,7 @@ public class GameDtoFactory {
         } else if (game instanceof Communication) {
             return CommunicationDto.fromEntity((Communication) game);
         }
-        throw new InvalidOperationException("Type de jeu inconnu" , ErrorCodes.UNKNOWN_GAME_TYPE);
+        throw new InvalidOperationException("Type de jeu inconnu", ErrorCodes.UNKNOWN_GAME_TYPE);
     }
 
 }

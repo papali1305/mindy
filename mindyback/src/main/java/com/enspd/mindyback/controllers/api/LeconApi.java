@@ -1,8 +1,6 @@
 package com.enspd.mindyback.controllers.api;
 
-import com.enspd.mindyback.dto.CompetenceDto;
 import com.enspd.mindyback.dto.LeconDto;
-import com.enspd.mindyback.models.Chapter;
 import com.enspd.mindyback.models.Lecon;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,8 +17,8 @@ public interface LeconApi {
 
     @PostMapping(LECON_ENDPOINT + "/createLecons")
     @Operation(summary = "creer les lecons du chapitre (6) si celui ci est debloque")
-    @ApiResponse(responseCode = "200", description = "Lecons cree" ,  content = @Content(mediaType = "application/json", schema = @Schema(implementation = LeconDto.class)))
-       public List<LeconDto> createChapterLecons(@RequestBody Integer chapterId, @RequestHeader(name = "Authorization") String jwt);
+    @ApiResponse(responseCode = "200", description = "Lecons cree", content = @Content(mediaType = "application/json", schema = @Schema(implementation = LeconDto.class)))
+    public List<LeconDto> createChapterLecons(@RequestBody Integer chapterId, @RequestHeader(name = "Authorization") String jwt);
 
 
     @GetMapping(LECON_ENDPOINT + "/findAll/{chapterId}")

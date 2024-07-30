@@ -2,11 +2,11 @@ package com.enspd.mindyback.dto;
 
 import com.enspd.mindyback.dto.factory.GameDtoFactory;
 import com.enspd.mindyback.models.Correction;
-import com.enspd.mindyback.models.Game;
 
 import java.time.Instant;
 
-public record CorrectionDto(Integer id, Instant creationDate, Instant lastModifiedDate, String analysis, String response, boolean isCorrect, GameDto gameDto) {
+public record CorrectionDto(Integer id, Instant creationDate, Instant lastModifiedDate, String analysis,
+                            String response, boolean isCorrect, GameDto gameDto) {
 
     public static CorrectionDto fromEntity(Correction entity) {
         return new CorrectionDto(entity.getId(),
@@ -15,7 +15,7 @@ public record CorrectionDto(Integer id, Instant creationDate, Instant lastModifi
                 entity.getAnalysis(),
                 entity.getResponse(),
                 entity.isCorrect(),
-                entity.getGame() != null ? GameDtoFactory.createGameDto(entity.getGame()): null);
+                entity.getGame() != null ? GameDtoFactory.createGameDto(entity.getGame()) : null);
     }
 
     public static Correction toEntity(CorrectionDto dto) {

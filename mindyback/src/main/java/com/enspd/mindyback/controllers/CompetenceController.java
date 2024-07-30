@@ -3,11 +3,9 @@ package com.enspd.mindyback.controllers;
 import com.enspd.mindyback.controllers.api.CompetenceApi;
 import com.enspd.mindyback.dto.CompetenceDto;
 import com.enspd.mindyback.dto.UserDto;
-import com.enspd.mindyback.models.User;
 import com.enspd.mindyback.services.CompetenceService;
 import com.enspd.mindyback.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;

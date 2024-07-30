@@ -4,9 +4,7 @@ import com.enspd.mindyback.dto.*;
 import com.enspd.mindyback.exception.EntityNotFoundException;
 import com.enspd.mindyback.exception.ErrorCodes;
 import com.enspd.mindyback.exception.InvalidOperationException;
-import com.enspd.mindyback.models.Communication;
-import com.enspd.mindyback.models.Lecon;
-import com.enspd.mindyback.models.Scenario;
+import com.enspd.mindyback.models.*;
 import com.enspd.mindyback.models.type.CompetenceType;
 import com.enspd.mindyback.repository.GameRepository;
 import com.enspd.mindyback.services.*;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -33,12 +30,12 @@ public class GameServiceImpl implements GameService {
     private LeconService leconService;
 
     @Autowired
-    private CompetenceService competenceService;
-    @Autowired
-    private IaService iaService;
+    private GameRepository gameRepository;
 
     @Autowired
-    private GameRepository gameRepository;
+    private SentenceCompletionService sentenceCompletionService;
+    @Autowired
+    private SentenceQcmService sentenceQcmService;
 
     @Override
     public List<GameDto> createLeconGames(Integer leconId, String jwt) {
@@ -65,7 +62,21 @@ public class GameServiceImpl implements GameService {
 
                 return games;
             case VERBAL_CONV:
-                return null;
+                List<SentenceCompletion> sentenceCompletions = sentenceCompletionService.createSentenceCompletions(LeconDto.toEntity(leconDto), jwt);
+                List<SentenceCompletionDto> sentenceCompletionsDto = new ArrayList<>();
+                for (SentenceCompletion sentenceCompletion : sentenceCompletions) {
+                    SentenceCompletionDto sentenceCompletionDto = SentenceCompletionDto.fromEntity(sentenceCompletion);
+                    sentenceCompletionsDto.add(sentenceCompletionDto);
+                }
+                List<SentenceQcm> sentenceQcms = sentenceQcmService.createSentenceQcms(LeconDto.toEntity(leconDto), jwt);
+                List<SentenceQcmDto> sentenceQcmsDto = new ArrayList<>();
+                for (SentenceQcm sentenceQcm : sentenceQcms) {
+                    SentenceQcmDto sentenceQcmDto = SentenceQcmDto.fromEntity(sentenceQcm);
+                    sentenceQcmsDto.add(sentenceQcmDto);
+                }
+                games.addAll(sentenceCompletionsDto);
+                games.addAll(sentenceQcmsDto);
+                return games;
             case SOCIAL:
                 List<Communication> communications = communicationService.createCommunications(LeconDto.toEntity(leconDto), jwt);
                 List<CommunicationDto> communicationsDto = new ArrayList<>();
@@ -83,7 +94,12 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public LeconDto findLeconByGameId(Integer gameId) {
-        Lecon lecon =  gameRepository.findLeconByGameId(gameId).orElseThrow( () -> new EntityNotFoundException("Aucune lecon trouve avec l id " + gameId, ErrorCodes.LECON_NOT_FOUND));
+        Lecon lecon = gameRepository.findLeconByGameId(gameId).orElseThrow(() -> new EntityNotFoundException("Aucune lecon trouve avec l id " + gameId, ErrorCodes.LECON_NOT_FOUND));
         return LeconDto.fromEntity(lecon);
+    }
+
+    @Override
+    public void validateLeconGame(Integer gameId) {
+        gameRepository.validateLeconGame(gameId);
     }
 }

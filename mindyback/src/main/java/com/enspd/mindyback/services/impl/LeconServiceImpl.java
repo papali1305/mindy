@@ -6,10 +6,8 @@ import com.enspd.mindyback.dto.UserDto;
 import com.enspd.mindyback.exception.EntityNotFoundException;
 import com.enspd.mindyback.exception.ErrorCodes;
 import com.enspd.mindyback.exception.InvalidOperationException;
-import com.enspd.mindyback.models.Chapter;
 import com.enspd.mindyback.models.Lecon;
 import com.enspd.mindyback.models.type.CompetenceType;
-import com.enspd.mindyback.repository.ChapterRepository;
 import com.enspd.mindyback.repository.LeconRepository;
 import com.enspd.mindyback.services.ChapterService;
 import com.enspd.mindyback.services.IaService;
@@ -20,7 +18,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

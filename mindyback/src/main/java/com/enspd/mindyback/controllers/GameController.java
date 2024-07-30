@@ -1,11 +1,9 @@
 package com.enspd.mindyback.controllers;
 
 import com.enspd.mindyback.controllers.api.GameApi;
-import com.enspd.mindyback.dto.CompetenceDto;
 import com.enspd.mindyback.dto.GameDto;
 import com.enspd.mindyback.dto.LeconDto;
 import com.enspd.mindyback.models.Communication;
-import com.enspd.mindyback.models.Lecon;
 import com.enspd.mindyback.models.Scenario;
 import com.enspd.mindyback.models.type.CompetenceType;
 import com.enspd.mindyback.services.*;
@@ -37,7 +35,7 @@ public class GameController implements GameApi {
 
     @Override
     public List<GameDto> createLeconGames(Integer leconId, String jwt) {
-        return  gameService.createLeconGames(leconId, jwt);
+        return gameService.createLeconGames(leconId, jwt);
     }
 
     @Override

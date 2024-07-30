@@ -81,6 +81,6 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Override
     public Evaluation findLastEvaluation(Integer idLecon) {
-        return evaluationRepository.findFirstByOOrderByCreationDateDescBy(idLecon).orElseThrow(() -> new EntityNotFoundException("Aucune evaluation trouve avec l id :" + idLecon , ErrorCodes.EVALUATION_NOT_FOUND));
+        return evaluationRepository.findFirstByOOrderByCreationDateDescBy(idLecon).orElseThrow(() -> new EntityNotFoundException("Aucune evaluation trouve avec l id :" + idLecon, ErrorCodes.EVALUATION_NOT_FOUND));
     }
 }

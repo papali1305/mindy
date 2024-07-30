@@ -9,4 +9,6 @@ public interface GameService {
     List<GameDto> createLeconGames(Integer leconId, String jwt);
 
     LeconDto findLeconByGameId(Integer gameId);
+
+    void validateLeconGame(Integer gameId);
 }

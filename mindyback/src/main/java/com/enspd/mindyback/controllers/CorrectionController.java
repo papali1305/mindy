@@ -3,8 +3,6 @@ package com.enspd.mindyback.controllers;
 import com.enspd.mindyback.controllers.api.CorrectionApi;
 import com.enspd.mindyback.dto.CorrectionDto;
 import com.enspd.mindyback.dto.GameResponseDto;
-import com.enspd.mindyback.models.Correction;
-import com.enspd.mindyback.models.Game;
 import com.enspd.mindyback.services.CorrectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +14,6 @@ public class CorrectionController implements CorrectionApi {
 
     @Autowired
     private CorrectionService correctionService;
-
-
 
 
     @Override
