@@ -2,6 +2,7 @@ package com.enspd.mindyback.dto;
 
 import com.enspd.mindyback.models.Game;
 import com.enspd.mindyback.models.Scenario;
+import com.enspd.mindyback.models.ScenarioScene;
 import com.enspd.mindyback.models.type.GameType;
 import com.enspd.mindyback.models.type.ScenarioType;
 
@@ -11,7 +12,7 @@ public record ScenarioDto(Integer id, Instant creationDate, Instant lastModified
                           boolean isPassed, String userResponse,
                           GameType type,
                           CorrectionDto correction
-        , String aiQuestion, ScenarioType scenarioType) implements GameDto {
+        , String aiQuestion, ScenarioType scenarioType , ScenarioSceneDto scenarioScene) implements GameDto {
 
 
     public static ScenarioDto fromEntity(Scenario game) {
@@ -19,7 +20,7 @@ public record ScenarioDto(Integer id, Instant creationDate, Instant lastModified
                 , game.isPassed(), game.getUserResponse(), game.getType(),
                 game.getCorrection() != null ? CorrectionDto.fromEntity(game.getCorrection()) : null
                 ,
-                game.getAiQuestion(), game.getScenarioType());
+                game.getAiQuestion(), game.getScenarioType() , ScenarioSceneDto.fromEntity(game.getScenarioScene()));
     }
 
     @Override
@@ -38,6 +39,7 @@ public record ScenarioDto(Integer id, Instant creationDate, Instant lastModified
         if (this.correction != null) {
             game.setCorrection(CorrectionDto.toEntity(this.correction));
         }
+        game.setScenarioScene(ScenarioSceneDto.toEntity(this.scenarioScene));
         return game;
     }
 }
