@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,18 +16,19 @@ import static com.enspd.mindyback.config.Utils.GAME_ENDPOINT;
 
 public interface GameApi {
 
-    @PostMapping(GAME_ENDPOINT + "/createByLeconId/{leconId}")
+    @PostMapping(GAME_ENDPOINT + "/createByLeconId")
     @Operation(summary = "Creer les jeux d une lecon ")
-    @ApiResponse(responseCode = "200", description = "Jeux cree", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CompetenceDto.class)))
-    public List<GameDto> createLeconGames(@PathVariable("leconId") Integer leconId, @RequestHeader(name = "Authorization") String jwt);
+    @ApiResponse(responseCode = "200", description = "Jeux cree", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GameDto.class)))
+    public List<GameDto> createLeconGames(@RequestBody Integer leconId, @RequestHeader(name = "Authorization") String jwt);
 
 
+    /*
     @GetMapping(GAME_ENDPOINT + "/scenario/createbylecon/{leconId}")
     public List<Scenario> createLeconScenarioGames(@PathVariable("leconId") Integer leconId, @RequestHeader(name = "Authorization") String jwt);
 
     @PostMapping(GAME_ENDPOINT + "/communication/createbylecon/{leconId}")
     public List<Communication> createLeconCommunicationGames(@PathVariable("leconId") Integer leconId, @RequestHeader(name = "Authorization") String jwt);
-
+*/
 
 
     @GetMapping(GAME_ENDPOINT +"/scenario/findById/{id}")

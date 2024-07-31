@@ -38,6 +38,8 @@ public class GameController implements GameApi {
         return gameService.createLeconGames(leconId, jwt);
     }
 
+    /*
+
     @Override
     public List<Scenario> createLeconScenarioGames(Integer leconId, String jwt) {
         LeconDto lecon = leconService.findLecon(leconId);
@@ -50,6 +52,7 @@ public class GameController implements GameApi {
         return scenarios;
     }
 
+
     @Override
     public List<Communication> createLeconCommunicationGames(Integer leconId, String jwt) {
         LeconDto lecon = leconService.findLecon(leconId);
@@ -61,7 +64,7 @@ public class GameController implements GameApi {
         return communications;
     }
 
-
+*/
     @Override
     public Scenario findGameScenarioById(Integer id) {
         return scenarioService.findScenario(id);
