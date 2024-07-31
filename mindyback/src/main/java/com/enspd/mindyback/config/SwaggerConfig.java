@@ -15,13 +15,6 @@ public class SwaggerConfig {
 
 
     @Bean
-    public GroupedOpenApi publicApi() {
-        return GroupedOpenApi.builder()
-                .group("api")
-                .pathsToMatch("/api/**")
-                .build();
-    }
-    @Bean
     public OpenAPI customOpenAPI() {
 
         final String securitySchemaame = "bearerAuth";
