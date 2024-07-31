@@ -31,6 +31,17 @@ public class JwtProvider {
     }
 
     public  String getEmailFromToken(String jwt){
+        System.out.println(jwt);
+        if ( jwt.startsWith("Bearer ")) {
+            // Extract token after "Bearer "
+            try {
+                jwt =jwt.substring(7);
+                // Continue processing with the extracted JWT
+            } catch (StringIndexOutOfBoundsException e) {
+                // Handle the exception if the token length is less than 7
+                System.out.println("Invalid token: " + jwt);
+            }
+        }
         jwt.substring(7);
         Claims claims = Jwts.parser().setSigningKey(key).build()
                 .parseClaimsJws(jwt).getBody();
