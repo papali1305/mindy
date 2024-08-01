@@ -37,13 +37,15 @@ public class GameServiceImpl implements GameService {
     @Autowired
     private SentenceQcmService sentenceQcmService;
 
+    @Autowired
+    private EvaluationService evaluationService;
+
     @Override
     public List<GameDto> createLeconGames(Integer leconId, String jwt) {
 
         CompetenceType competenceType = leconService.findLeconCompetenceType(leconId);
         LeconDto leconDto = leconService.findLecon(leconId);
         UserDto userDto = userService.findUserByJwt(jwt);
-
         // Si verb -> compPhrase + Relier mot
         // Si non verb -> scenario Qro + scenario Qcm
         // Si social -> communication + communication Qcm
@@ -59,6 +61,7 @@ public class GameServiceImpl implements GameService {
                     scenariosDto.add(scenarioDto);
                 }
                 games.addAll(scenariosDto);
+                evaluationService.createEvalutation(LeconDto.toEntity(leconDto));
 
                 return games;
             case VERBAL_CONV:
@@ -76,6 +79,8 @@ public class GameServiceImpl implements GameService {
                 }
                 games.addAll(sentenceCompletionsDto);
                 games.addAll(sentenceQcmsDto);
+                evaluationService.createEvalutation(LeconDto.toEntity(leconDto));
+
                 return games;
             case SOCIAL:
                 List<Communication> communications = communicationService.createCommunications(LeconDto.toEntity(leconDto), jwt);
@@ -85,6 +90,7 @@ public class GameServiceImpl implements GameService {
                     communicationsDto.add(communicationDto);
                 }
                 games.addAll(communicationsDto);
+                evaluationService.createEvalutation(LeconDto.toEntity(leconDto));
 
                 return games;
             default:
