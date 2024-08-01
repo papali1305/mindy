@@ -20,8 +20,8 @@ public interface CorrectionApi {
 
     @Operation(summary = " Corriger le jeu ")
     @ApiResponse(responseCode = "200", description = "Correction envoye", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CorrectionDto.class)))
-    @PostMapping(CORRECTION_ENDPOINT + "/corrigegame")
-    public CorrectionDto createCorrection(@RequestBody Integer GameId, @RequestBody GameResponseDto userResponse, @RequestHeader(name = "Authorization") String jwt);
+    @PostMapping(CORRECTION_ENDPOINT + "/corrigegame/{gameId}")
+    public CorrectionDto createCorrection(@RequestHeader(name = "gameId") Integer gameId, @RequestBody GameResponseDto userResponse, @RequestHeader(name = "Authorization") String jwt);
 
 
 }
