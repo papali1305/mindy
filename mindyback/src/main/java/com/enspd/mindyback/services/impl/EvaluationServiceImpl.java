@@ -22,18 +22,13 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Override
     public Evaluation createEvalutation(Lecon lecon) {
-        List<Game> gameList = lecon.getGames();
         int note = 0;
-        for (Game game : gameList) {
-            if (game.isPassed()) {
-                note++;
-            }
-        }
+
         List<Evaluation> pastEvaluations = findAllLeconEvaluations(lecon.getId());
         Evaluation evaluation = new Evaluation();
 
         if (pastEvaluations != null) {
-            Evaluation last = pastEvaluations.get(pastEvaluations.size() - 1);
+            Evaluation last = pastEvaluations.get( pastEvaluations.size() - 1 );
             evaluation.setNote(note);
             evaluation.setProgress(note - last.getProgress());
             evaluation.setEvaluationNumber(last.getEvaluationNumber() + 1);

@@ -52,7 +52,7 @@ public class IaServiceImpl implements IaService {
 
     private String huggingFaceToken = "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";
 
-    private String mistralAiToken = "rj95jKUICS5sSOHBEt1R6YL1NAIuXAp0";
+    private String mistralAiToken = "GkeAzkf9TMU8eCUtjQbh5xnxPPuUthLZ";
 
     private String huggingFacStabilityurl = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3-medium-diffusers";
     private String huggingFaceLLAMA3url = "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct/v1/chat/completions";
