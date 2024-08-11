@@ -44,18 +44,13 @@ public class IaServiceImpl implements IaService {
     @Autowired
     private CommunicationRepository communicationRepository;
 
-    private String GeminiToken = "AIzaSyBySOfAajgwYn5MPjoChfnkfCga1WsPGQs";
-
-    private String GeminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest";
-
-    private String GeminiModel = "text-davinci-003";
 
     private String huggingFaceToken = "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";
 
     private String mistralAiToken = "GkeAzkf9TMU8eCUtjQbh5xnxPPuUthLZ";
 
+
     private String huggingFacStabilityurl = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3-medium-diffusers";
-    private String huggingFaceLLAMA3url = "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct/v1/chat/completions";
 
 
     @Override
