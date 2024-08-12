@@ -62,32 +62,32 @@ public class AuthController {
     public ResponseEntity<AuthResponse> createUtilisateurHandler(@RequestBody UserDto user) {
 
         String firstName = user.firstName();
-        String lastName = user.lastName();
+       // String lastName = user.lastName();
         String mail = user.mail();
         String password = user.password();
         Gender gender = Gender.valueOf(String.valueOf(user.gender()).toUpperCase());
         Integer age = user.age();
-        String city = user.city();
-        String state = user.state();
-        String country = user.country();
+     //   String city = user.city();
+     //   String state = user.state();
+    //    String country = user.country();
         String comorbidities = user.comorbidities();
         SeverityLevel severityLevel = SeverityLevel.valueOf(String.valueOf(user.severityLevel()).toUpperCase());
-        Integer phoneNumber = user.phoneNumber();
+    //    Integer phoneNumber = user.phoneNumber();
 
         User createdUSer = new User();
 
         createdUSer.setFirstName(firstName);
         createdUSer.setMail(mail);
         createdUSer.setPassword(passwordEncoder.encode(password));
-        createdUSer.setLastName(lastName);
+      //  createdUSer.setLastName(lastName);
         createdUSer.setGender(gender);
         createdUSer.setAge(age);
-        createdUSer.setCity(city);
-        createdUSer.setState(state);
-        createdUSer.setCountry(country);
+     //   createdUSer.setCity(city);
+     //   createdUSer.setState(state);
+     //   createdUSer.setCountry(country);
         createdUSer.setComorbidities(comorbidities);
         createdUSer.setSeverityLevel(severityLevel);
-        createdUSer.setPhoneNumber(phoneNumber);
+      //  createdUSer.setPhoneNumber(phoneNumber);
 
 
         System.out.println(createdUSer);
@@ -112,6 +112,7 @@ public class AuthController {
     })
     public ResponseEntity<AuthResponse> signin(@RequestBody AuthDto authDto) {
 
+        System.out.println("-------------------------------");
         String password = authDto.getPassword();
         String email = authDto.getMail();
 

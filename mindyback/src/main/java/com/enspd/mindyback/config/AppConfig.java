@@ -49,7 +49,7 @@ public class AppConfig {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg = new CorsConfiguration();
 
-                cfg.setAllowedOrigins(Arrays.asList("http://192.168.8.106:8081","http://192.168.8.108:8081","https://localhost:3000","http://localhost:5173","https://localhost:5173","http://192.168.8.102:5173","http://192.168.1.101:5173","http://192.168.1.104:5173","http://10.42.0.1:5173","http://192.168.8.100:5173"));
+                cfg.setAllowedOrigins(Arrays.asList("http://192.168.8.106:8081","http://192.168.8.110:8081","https://localhost:3000","http://localhost:5173","https://localhost:5173","http://192.168.8.102:5173","http://192.168.1.101:5173","http://192.168.1.104:5173","http://10.42.0.1:5173","http://192.168.8.100:5173"));
                 cfg.setAllowCredentials(true);
                 cfg.setAllowedHeaders(Collections.singletonList("*"));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
