@@ -58,8 +58,8 @@ Edit the `application.properties` file located in `/src/main/resources` by enter
 information:
 
   ```properties
-  spring.datasource.username=yourMariadbUserName
-spring.datasource.password=yourPassword
+    spring.datasource.username=yourMariadbUserName
+    spring.datasource.password=yourPassword
   ```
 
 Replace yourMariadbUserName, and yourPassword with the appropriate values for your
@@ -73,8 +73,17 @@ With Maven:
 
   ```bash
       mvn clean install
-      mvn spring-boot:run
   ```
+  and run with
+  ```bash
+      mvn spring-boot:run 
+  ```
+  or run MindybackApllication main class
+
+Note : account creation is not yet implemented on mobile view so you need to login using the pre-registered user with the following information : 
+ * mail : name@gmail.com *
+ * password : password *
+
 
 ### Dependencies
 

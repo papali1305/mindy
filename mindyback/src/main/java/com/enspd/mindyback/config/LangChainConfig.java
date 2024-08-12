@@ -1,7 +1,6 @@
 package com.enspd.mindyback.config;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.vertexai.VertexAiChatModel;
 import dev.langchain4j.model.vertexai.VertexAiGeminiChatModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +13,7 @@ public class LangChainConfig {
         ChatLanguageModel model = VertexAiGeminiChatModel.builder()
                 .project("mindy-432210")
                 .location("northamerica-northeast1")
-                .modelName("gemini-1.5-flash-001")
+                .modelName("gemini-1.5-pro")
                 .maxRetries(3)
                 .temperature(1f)
                 .topP(1F)

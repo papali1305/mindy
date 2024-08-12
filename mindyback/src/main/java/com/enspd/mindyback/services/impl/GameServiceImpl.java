@@ -61,7 +61,7 @@ public class GameServiceImpl implements GameService {
                     scenariosDto.add(scenarioDto);
                 }
                 games.addAll(scenariosDto);
-                evaluationService.createEvalutation(LeconDto.toEntity(leconDto));
+               // evaluationService.createEvalutation(LeconDto.toEntity(leconDto));
 
                 return games;
             case VERBAL_CONV:
@@ -79,7 +79,7 @@ public class GameServiceImpl implements GameService {
                 }
                 games.addAll(sentenceCompletionsDto);
                 games.addAll(sentenceQcmsDto);
-                evaluationService.createEvalutation(LeconDto.toEntity(leconDto));
+               // evaluationService.createEvalutation(LeconDto.toEntity(leconDto));
 
                 return games;
             case SOCIAL:
@@ -90,7 +90,7 @@ public class GameServiceImpl implements GameService {
                     communicationsDto.add(communicationDto);
                 }
                 games.addAll(communicationsDto);
-                evaluationService.createEvalutation(LeconDto.toEntity(leconDto));
+               // evaluationService.createEvalutation(LeconDto.toEntity(leconDto));
 
                 return games;
             default:

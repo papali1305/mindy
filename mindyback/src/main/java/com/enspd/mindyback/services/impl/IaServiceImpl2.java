@@ -124,7 +124,7 @@ public class IaServiceImpl2 implements IaService {
                                                   - contexte : "une description breve de l image demande / du prompt pas plus de 30 mots";
                                                   Attention :
                                                   Le résultat doit être au format JSON avec uniquement les informations demandées et en langue anglaise. Ne répond que par le JSON des scénarios, rien d'autre, aucun commentaire. Ta réponse doit pouvoir être convertie en JSON avec uniquement les informations demandées. N'oublie pas de remplir tous les champs.
-                                                  
+                                                  ne repond que par le JSON des scénarios, rien d'autre, aucun commentaire. Ta réponse doit pouvoir être convertie en JSON avec uniquement les informations demandées. N'oublie pas de remplir tous les champs.
                                                   Exemple de format JSON attendu :
                                                   [
                                                     {
@@ -377,8 +377,8 @@ public class IaServiceImpl2 implements IaService {
                                           Attention:
                                           Le résultat doit être au format JSON avec uniquement les informations demandées et en langue anglaise.Ne répond que par le JSON
                                           des scénarios, rien d'autre, aucun commentaire. Ta réponse doit pouvoir être convertie en JSON avec uniquement les informations demandées n'oublie pas de remplir tous les champs.
-
-                                                        Exemple de format JSON attendu :
+                                            
+                                          Exemple de format JSON attendu :
                                                [{
                                                     nom: "...",
                                                     description:"...",
